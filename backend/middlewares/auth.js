@@ -16,7 +16,6 @@ const authMiddleware = (req, res, next) => {
     console.log("decoded", decoded);
     console.log("decoded.userId:", decoded.userId);
     console.log("decoded.id:", decoded.id);
-    // Support both old tokens (with 'id') and new tokens (with 'userId')
     req.userid = decoded.userId || decoded.id;
     next();
   } catch (error) {

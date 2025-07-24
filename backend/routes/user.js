@@ -117,6 +117,7 @@ router.get("/profile", authMiddleware, async (req, res) => {
     }
 
     const user = await User.findById(userId).select("-password_hash");
+    //yaad rakh .select("-password_hash") ko use karte hain taaki password hash return na ho
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -133,9 +134,63 @@ const updateBody = z.object({
   lastName: z.string().optional(),
 });
 
+router.put("/profile", authMiddleware, async (req, res) => {
+  const userId = req.userid;
+  // console.log("User ID from middleware:", userId);
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const parsed = updateBody.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Invalid input" });
+  }
+  const { password, firstName, lastName } = parsed.data;
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-// router.put("/profile", async (req, res) => {
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password_hash = await bcrypt.hash(password, salt);
+    }
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
 
-// });
+    const updatedUser = await user.save();
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: {
+        id: updatedUser._id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.delete("/profile", authMiddleware, async (req, res) => {
+  const userId = req.userid;
+  // console.log("User ID from middleware:", userId);
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try {
+    const user = await User.findByIdAndDelete(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// router.
 
 module.exports = router;
