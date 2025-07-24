@@ -2,8 +2,6 @@ const mongoose = require("mongoose");
 const config = require("../config");
 
 const bcrypt = require("bcrypt");
-const { refine } = require("zod");
-const { required } = require("zod/mini");
 
 mongoose
   .connect(config.MONGO_URL)
@@ -63,6 +61,21 @@ UserSchema.methods.validatePassword = async function (candidatePassword) {
 
 const User = mongoose.model("User", UserSchema);
 
+//blog keliye schema
+const blogSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  createdAt: { type: Date, default: Date.now },
+});
+
+const Blog = mongoose.model("Blog", blogSchema);
+
 module.exports = {
   User,
+  Blog,
 };

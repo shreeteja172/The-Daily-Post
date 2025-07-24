@@ -17,7 +17,7 @@ const registerSchema = z.object({
 });
 
 router.post(
-  "/register",
+  "/auth/register",
   asyncHandler(async (req, res) => {
     try {
       // console.log("Request body:", req.body);
@@ -65,7 +65,7 @@ router.post(
 );
 
 router.post(
-  "/login",
+  "/auth/login",
   asyncHandler(async (req, res) => {
     try {
       const { username, password } = req.body;
@@ -111,13 +111,13 @@ router.post(
 router.get("/profile", authMiddleware, async (req, res) => {
   try {
     const userId = req.userid;
-    console.log("User ID from middleware:", userId);
+    // console.log("User ID from middleware:", userId);
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     const user = await User.findById(userId).select("-password_hash");
-    //yaad rakh .select("-password_hash") ko use karte hain taaki password hash return na ho
+    //yaad rakh .select("-password_hash") ko use karte hain taaki password-hash return na ho
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
