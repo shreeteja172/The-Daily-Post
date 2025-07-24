@@ -8,6 +8,7 @@ const router = express.Router();
 const createBlogSchema = z.object({
   title: z.string().min(1),
   content: z.string().min(5),
+  date: z.string().datetime().optional() 
 });
 
 router.post(
@@ -31,6 +32,7 @@ router.post(
       const newBlog = new Blog({
         title,
         content,
+        date: date || new Date().toISOString(),
       });
       newBlog.author = authorId;
       const savedBlog = await newBlog.save();
@@ -88,7 +90,7 @@ router.delete(
   authMiddleware,
   asyncHandler(async (req, res) => {
     const userId = req.userid;
-    //   console.log("User ID from middleware:", userId);
+    console.log("User ID from middleware:", userId);
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -122,11 +124,15 @@ router.put(
           error: "Invalid input",
         });
       }
-      const { title, content } = parsed.data;
-        // console.log("Parsed data for update:", parsed.data);
+      const { title, content,date } = parsed.data;
+      // console.log("Parsed data for update:", parsed.data);
+      const updateData = { title, content };
+      if (date) {
+        updateData.date = date; // Only update date if provided
+      }
       const updatedBlog = await Blog.findByIdAndUpdate(
         blogId,
-        { title, content },
+        updateData,
         { new: true }
       ).populate("author", "username email");
       if (!updatedBlog) {
