@@ -17,22 +17,23 @@ const LandingPage = () => {
       <div className="absolute inset-0 bg-black/20"></div>
 
       <header className="fixed md:left-6 md:top-1/2 md:transform md:-translate-y-1/2 top-4 left-1/2 transform -translate-x-1/2 md:translate-x-0 z-50">
-        <div className="bg-black/50 backdrop-blur-xl rounded-full md:px-4 md:py-6 px-6 py-4 shadow-2xl border border-orange-500/30 shadow-orange-500/20">
-          <nav className="flex md:flex-col flex-row items-center md:space-y-6 md:space-x-0 space-x-6 space-y-0">
+        <div className="bg-black/50 backdrop-blur-xl rounded-full md:px-4 md:py-6 px-3 py-2 shadow-2xl border border-orange-500/30 shadow-orange-500/20">
+          <nav className="flex md:flex-col flex-row items-center md:space-y-6 md:space-x-0 space-x-3 space-y-0">
             <div className="relative md:mb-2 mb-0">
-              <div className="w-12 h-12 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-lg shadow-orange-500/50">
-                <span className="text-white font-bold text-sm">TDP</span>
+              <div className="md:w-12 md:h-12 w-8 h-8 bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 rounded-full flex items-center justify-center shadow-lg shadow-orange-500/50">
+                <span className="text-white font-bold md:text-sm text-xs">
+                  TDP
+                </span>
               </div>
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-br from-orange-300 to-orange-400 rounded-full animate-pulse shadow-sm shadow-orange-400/50"></div>
             </div>
 
             <a
               href="#hero"
-              className="text-white/80 hover:text-white transition-all duration-300 p-3 rounded-full hover:bg-orange-500/20 hover:shadow-sm hover:shadow-orange-500/30 group"
+              className="text-white/80 hover:text-white transition-all duration-300 md:p-3 p-2 rounded-full hover:bg-orange-500/20 hover:shadow-sm hover:shadow-orange-500/30 group"
               title="Home"
             >
               <svg
-                className="w-5 h-5 group-hover:scale-110 transition-transform"
+                className="md:w-5 md:h-5 w-4 h-4 group-hover:scale-110 transition-transform"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -48,11 +49,11 @@ const LandingPage = () => {
 
             <a
               href="#features"
-              className="text-white/80 hover:text-white transition-all duration-300 p-3 rounded-full hover:bg-orange-500/20 hover:shadow-sm hover:shadow-orange-500/30 group"
+              className="text-white/80 hover:text-white transition-all duration-300 md:p-3 p-2 rounded-full hover:bg-orange-500/20 hover:shadow-sm hover:shadow-orange-500/30 group"
               title="Features"
             >
               <svg
-                className="w-5 h-5 group-hover:scale-110 transition-transform"
+                className="md:w-5 md:h-5 w-4 h-4 group-hover:scale-110 transition-transform"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -68,11 +69,11 @@ const LandingPage = () => {
 
             <a
               href="#about"
-              className="text-white/80 hover:text-white transition-all duration-300 p-3 rounded-full hover:bg-orange-500/20 hover:shadow-sm hover:shadow-orange-500/30 group"
+              className="text-white/80 hover:text-white transition-all duration-300 md:p-3 p-2 rounded-full hover:bg-orange-500/20 hover:shadow-sm hover:shadow-orange-500/30 group"
               title="About"
             >
               <svg
-                className="w-5 h-5 group-hover:scale-110 transition-transform"
+                className="md:w-5 md:h-5 w-4 h-4 group-hover:scale-110 transition-transform"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -86,15 +87,15 @@ const LandingPage = () => {
               </svg>
             </a>
 
-            <div className="md:w-8 md:h-px w-px h-8 bg-gradient-to-r from-transparent via-orange-500/50 to-transparent"></div>
+            <div className="md:w-8 md:h-px w-px h-6 bg-gradient-to-r from-transparent via-orange-500/50 to-transparent"></div>
 
             <Link
               to="/login"
-              className="text-white/80 hover:text-white transition-all duration-300 p-3 rounded-full hover:bg-orange-500/20 hover:shadow-sm hover:shadow-orange-500/30 group"
+              className="text-white/80 hover:text-white transition-all duration-300 md:p-3 p-2 rounded-full hover:bg-orange-500/20 hover:shadow-sm hover:shadow-orange-500/30 group"
               title="Login"
             >
               <svg
-                className="w-5 h-5 group-hover:scale-110 transition-transform"
+                className="md:w-5 md:h-5 w-4 h-4 group-hover:scale-110 transition-transform"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -110,11 +111,11 @@ const LandingPage = () => {
 
             <Link
               to="/register"
-              className="bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 hover:from-orange-500 hover:via-orange-600 hover:to-orange-700 text-white p-3 rounded-full transition-all duration-300 shadow-lg shadow-orange-500/50 hover:shadow-orange-500/70 group transform hover:scale-105"
+              className="bg-gradient-to-br from-orange-400 via-orange-500 to-orange-600 hover:from-orange-500 hover:via-orange-600 hover:to-orange-700 text-white md:p-3 p-2 rounded-full transition-all duration-300 shadow-lg shadow-orange-500/50 hover:shadow-orange-500/70 group transform hover:scale-105"
               title="Get Started"
             >
               <svg
-                className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300"
+                className="md:w-5 md:h-5 w-4 h-4 group-hover:rotate-90 transition-transform duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -135,11 +136,10 @@ const LandingPage = () => {
         id="hero"
         className="min-h-screen flex items-center relative z-10"
       >
-        <div className="max-w-7xl mx-auto px-6 md:pl-32 py-20">
+        <div className="max-w-7xl mx-auto px-6 md:pl-32 py-20 pt-24 md:pt-20">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
               <div className="inline-flex items-center space-x-2 bg-black/50 backdrop-blur-sm border border-orange-500/30 rounded-full px-4 py-2 shadow-lg shadow-orange-500/20">
-                <div className="w-2 h-2 bg-gradient-to-r from-orange-300 to-orange-500 rounded-full animate-pulse shadow-sm shadow-orange-400/50"></div>
                 <span className="text-orange-100/90 text-sm font-medium">
                   New Platform Launch
                 </span>
@@ -246,7 +246,17 @@ const LandingPage = () => {
                     Recipe of Metaphetamine
                   </div>
                   <div className="text-white/70 text-sm leading-relaxed">
-                    In the heart of the New Mexico desert, I found my calling. Chemistry wasn't just a subject I taught anymore—it became my art. The crystallization process is delicate: precise measurements of pseudoephedrine, careful temperature regulation, and the patience of a scientist. The blue color—my signature—comes from an exceptional level of purity. When the crystals form, there's a moment of perfect clarity. This isn't just cooking; it's transformation. From an ordinary high school teacher to something else entirely. Sometimes the most unexpected journeys begin with a simple chemical reaction.
+                    In the heart of the New Mexico desert, I found my calling.
+                    Chemistry wasn't just a subject I taught anymore—it became
+                    my art. The crystallization process is delicate: precise
+                    measurements of pseudoephedrine, careful temperature
+                    regulation, and the patience of a scientist. The blue
+                    color—my signature—comes from an exceptional level of
+                    purity. When the crystals form, there's a moment of perfect
+                    clarity. This isn't just cooking; it's transformation. From
+                    an ordinary high school teacher to something else entirely.
+                    Sometimes the most unexpected journeys begin with a simple
+                    chemical reaction.
                   </div>
                   <div className="flex items-center space-x-4 text-orange-200/60 text-sm">
                     {/* <span>5 min read</span> */}
@@ -254,9 +264,6 @@ const LandingPage = () => {
                     {/* <span>124 likes</span> */}
                   </div>
                 </div>
-
-                <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-br from-orange-300 to-orange-500 rounded-full animate-bounce shadow-lg shadow-orange-400/30"></div>
-                <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full animate-pulse shadow-md shadow-orange-500/40"></div>
               </div>
 
               <div className="absolute -top-4 -left-4 bg-black/20 backdrop-blur-xl border border-orange-500/10 rounded-3xl p-6 shadow-xl -rotate-6 -z-10">
@@ -408,24 +415,23 @@ const LandingPage = () => {
 
             <div className="relative">
               <div className="inline-flex items-center space-x-2 bg-black/50 backdrop-blur-sm border border-orange-500/30 rounded-full px-4 py-2 mb-8 shadow-lg shadow-orange-500/20">
-                <div className="w-2 h-2 bg-gradient-to-r from-orange-300 to-orange-500 rounded-full animate-pulse shadow-sm shadow-orange-400/50"></div>
                 <span className="text-orange-100/90 text-sm font-medium">
                   Join Our Community
                 </span>
               </div>
 
-              <h2 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                 Ready to share your
                 <br />
                 <span className="bg-gradient-to-r from-orange-300 via-orange-400 to-orange-500 bg-clip-text text-transparent drop-shadow-lg">
                   story?
                 </span>
-                <span className="block mt-2 text-xl text-orange-200/60">
+                <span className="block mt-2 text-lg sm:text-xl text-orange-200/60">
                   Daily...
                 </span>
               </h2>
 
-              <p className="text-xl text-white/70 mb-12 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg sm:text-xl text-white/70 mb-12 max-w-2xl mx-auto leading-relaxed">
                 Join thousands of writers and readers in our vibrant community.
                 Start your blogging journey today and connect with people who
                 share your passion for storytelling.
@@ -433,11 +439,11 @@ const LandingPage = () => {
 
               <Link
                 to="/register"
-                className="group relative inline-flex items-center space-x-3 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 text-white px-12 py-5 rounded-2xl text-xl font-bold transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/40 transform hover:-translate-y-2 overflow-hidden"
+                className="group relative inline-flex items-center justify-center space-x-3 bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 text-white px-8 md:px-12 py-4 md:py-5 rounded-2xl text-lg md:text-xl font-bold transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/40 transform hover:-translate-y-2 overflow-hidden w-full sm:w-auto"
               >
                 <span className="relative z-10">Start Writing Now</span>
                 <svg
-                  className="w-6 h-6 group-hover:translate-x-1 transition-transform relative z-10"
+                  className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-1 transition-transform relative z-10"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -479,9 +485,6 @@ const LandingPage = () => {
                 </div>
               </div> */}
             </div>
-
-            <div className="absolute -top-4 -right-4 w-8 h-8 bg-gradient-to-br from-orange-300 to-orange-500 rounded-full animate-bounce shadow-lg shadow-orange-400/30"></div>
-            <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full animate-pulse shadow-md shadow-orange-500/40"></div>
           </div>
         </div>
       </section>
