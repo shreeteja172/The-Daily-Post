@@ -1,36 +1,80 @@
 import React from "react";
 import { useState } from "react";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const Signin = () => {
   const [data, setData] = useState({
-    email: "",
+    username: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignin = (e) => {
+  const handleSignin = async (e) => {
     e.preventDefault();
-    // Handle sign-in logic here
-    console.log("Sign-in data:", data);
-  }
+
+    if (!data.username || !data.password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/auth/login`,
+        data
+      );
+      localStorage.setItem("token", response.data.token);
+      // console.log("Response:", response);
+      if (response.status === 200) {
+        toast.success("Welcome Again!");
+        setData({
+          username: "",
+          password: "",
+        });
+        // Redirect to home or dashboard
+      } else {
+        toast.error("Failed to sign in");
+      }
+    } catch (error) {
+      console.error("Error during sign-in:", error);
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An error occurred during sign-in");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
-    <form className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded">
+    <form
+      className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded"
+      onSubmit={handleSignin}
+    >
       <h2 className="text-2xl font-bold mb-6 text-center">Sign In</h2>
       <input
-        type="email"
-        placeholder="Email"
+        type="text"
+        placeholder="Username"
         className="w-full p-2 border rounded mb-3"
-        onChange={(e) => setData({ ...data, email: e.target.value })}
+        value={data.username}
+        onChange={(e) => setData({ ...data, username: e.target.value })}
+        required
       />
       <input
         type="password"
         placeholder="Password"
         className="w-full p-2 border rounded mb-3"
+        value={data.password}
         onChange={(e) => setData({ ...data, password: e.target.value })}
+        required
       />
-      <button className="w-full bg-blue-600 text-white py-2 rounded"
-        onClick={handleSignin}
+      <button
+        type="submit"
+        className="w-full bg-blue-600 text-white py-2 rounded disabled:opacity-50"
+        disabled={isLoading}
       >
-        Sign In
+        {isLoading ? "Signing In..." : "Sign In"}
       </button>
       <p className="mt-4 text-center">
         Don't have an account?{" "}
