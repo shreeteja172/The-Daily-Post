@@ -2,8 +2,10 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Signin = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -33,6 +35,9 @@ const Signin = () => {
           password: "",
         });
         // Redirect to home or dashboard
+        setTimeout(() => {
+          navigate("/blogs");
+        }, 2000);
       } else {
         toast.error("Failed to sign in");
       }

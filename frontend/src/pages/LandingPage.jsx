@@ -192,7 +192,7 @@ const LandingPage = () => {
                 </button>
 
                 <button
-                  onClick={() => navigate("/posts")}
+                  onClick={() => navigate("/blogs")}
                   className="group text-white border border-emerald-500/30 hover:border-emerald-500/60 px-8 py-4 rounded-2xl text-lg font-semibold transition-all duration-300 hover:bg-emerald-500/10 backdrop-blur-sm flex items-center justify-center space-x-2 hover:shadow-lg hover:shadow-emerald-500/20"
                 >
                   <span>Explore Posts</span>

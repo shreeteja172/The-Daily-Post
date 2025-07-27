@@ -2,7 +2,15 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import {useNavigate} from "react-router-dom";
 const Signup = () => {
+  const navigate = useNavigate();
+  // useEffect(() => {
+  //   if (localStorage.getItem("token")) {
+  //     navigate("/");
+  //   }
+  // }
+  // , [navigate]);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -31,6 +39,9 @@ const Signup = () => {
           email: "",
           password: "",
         });
+        setTimeout(() => {
+          navigate("/blogs");
+        }, 2000);
       } else {
         toast.error("Failed to register user");
       }
