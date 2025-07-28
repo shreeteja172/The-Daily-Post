@@ -55,7 +55,10 @@ router.get(
   authMiddleware,
   asyncHandler(async (req, res) => {
     try {
-      const blogs = await Blog.find({ visibility: "public" })
+      // Include blogs that are public OR don't have visibility field (old blogs)
+      const blogs = await Blog.find({
+        $or: [{ visibility: "public" }, { visibility: { $exists: false } }],
+      })
         .populate("author", "username email")
         .sort({ createdAt: -1 });
 
@@ -67,13 +70,14 @@ router.get(
   })
 );
 
-// Specific routes must come BEFORE parameterized routes
 router.get(
   "/getAllBlogs",
   authMiddleware,
   asyncHandler(async (req, res) => {
     try {
-      const blogs = await Blog.find({ visibility: "public" })
+      const blogs = await Blog.find({
+        $or: [{ visibility: "public" }, { visibility: { $exists: false } }],
+      })
         .populate("author", "username email")
         .sort({ createdAt: -1 });
       res.status(200).json(blogs);
@@ -89,7 +93,9 @@ router.get(
   authMiddleware,
   asyncHandler(async (req, res) => {
     try {
-      const blogs = await Blog.find({ visibility: "public" })
+      const blogs = await Blog.find({
+        $or: [{ visibility: "public" }, { visibility: { $exists: false } }],
+      })
         .populate("author", "username email")
         .sort({ createdAt: -1 });
 
@@ -120,7 +126,6 @@ router.get(
   })
 );
 
-// Parameterized route comes AFTER specific routes
 router.get(
   "/:id",
   authMiddleware,
@@ -153,7 +158,6 @@ router.get(
     }
   })
 );
-// console.log("gf")
 router.delete(
   "/:id",
   authMiddleware,
