@@ -62,15 +62,24 @@ UserSchema.methods.validatePassword = async function (candidatePassword) {
 const User = mongoose.model("User", UserSchema);
 
 //blog keliye schema
-const blogSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  content: { type: String, required: true },
-  date: { type: Date, default: Date.now },
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  }},{
+const blogSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    content: { type: String, required: true },
+    date: { type: Date, default: Date.now },
+    author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    visibility: {
+      type: String,
+      enum: ["public", "private"],
+      default: "public",
+      required: true,
+    },
+  },
+  {
     timestamps: true,
   }
 );

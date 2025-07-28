@@ -8,7 +8,8 @@ const router = express.Router();
 const createBlogSchema = z.object({
   title: z.string().min(1),
   content: z.string().min(5),
-  date: z.string().datetime().optional() 
+  date: z.string().datetime().optional(),
+  visibility: z.enum(["public", "private"]).optional().default("public"),
 });
 
 router.post(
@@ -25,7 +26,7 @@ router.post(
           error: "Invalid input",
         });
       }
-      const { title, content } = parsed.data;
+      const { title, content, visibility } = parsed.data;
       //   console.log("Parsed data:", parsed.data);
       const authorId = req.userid;
 
@@ -33,6 +34,7 @@ router.post(
         title,
         content,
         date: date || new Date().toISOString(),
+        visibility: visibility || "public",
       });
       newBlog.author = authorId;
       const savedBlog = await newBlog.save();
@@ -50,12 +52,13 @@ router.post(
 
 router.get(
   "/",
+  authMiddleware,
   asyncHandler(async (req, res) => {
     try {
-      const blogs = await Blog.find()
+      const blogs = await Blog.find({ visibility: "public" })
         .populate("author", "username email")
         .sort({ createdAt: -1 });
-      //
+
       res.status(200).json(blogs);
     } catch (error) {
       console.error("Error fetching blogs:", error);
@@ -66,9 +69,12 @@ router.get(
 
 router.get(
   "/:id",
+  authMiddleware,
   asyncHandler(async (req, res) => {
     // console.log(req.params.id);
     const blogId = req.params.id;
+    const userId = req.userid; 
+
     try {
       const blog = await Blog.findById(blogId).populate(
         "author",
@@ -77,6 +83,15 @@ router.get(
       if (!blog) {
         return res.status(404).json({ message: "Blog not found" });
       }
+
+      if (blog.visibility === "private") {
+        if (blog.author._id.toString() !== userId) {
+          return res
+            .status(403)
+            .json({ message: "Access denied. This is a private blog." });
+        }
+      }
+
       res.status(200).json(blog);
     } catch (error) {
       console.error("Error fetching blog by ID:", error);
@@ -124,17 +139,18 @@ router.put(
           error: "Invalid input",
         });
       }
-      const { title, content,date } = parsed.data;
+      const { title, content, date, visibility } = parsed.data;
       // console.log("Parsed data for update:", parsed.data);
       const updateData = { title, content };
       if (date) {
-        updateData.date = date; // Only update date if provided
+        updateData.date = date; 
       }
-      const updatedBlog = await Blog.findByIdAndUpdate(
-        blogId,
-        updateData,
-        { new: true }
-      ).populate("author", "username email");
+      if (visibility) {
+        updateData.visibility = visibility; 
+      }
+      const updatedBlog = await Blog.findByIdAndUpdate(blogId, updateData, {
+        new: true,
+      }).populate("author", "username email");
       if (!updatedBlog) {
         return res.status(404).json({ message: "Blog not found" });
       }
@@ -149,14 +165,56 @@ router.put(
   })
 );
 
-router.get('/getAllBlogs', asyncHandler(async (req, res) => {
-  try {
-    const blogs = await Blog.find().populate("author", "username email").sort({ createdAt: -1 });
-    res.status(200).json(blogs);
-  } catch (error) {
-    console.error("Error fetching blogs:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-}));
+router.get(
+  "/getAllBlogs",
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    try {
+      const blogs = await Blog.find({ visibility: "public" })
+        .populate("author", "username email")
+        .sort({ createdAt: -1 });
+      res.status(200).json(blogs);
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+
+router.get(
+  "/getAllBlogsAuth",
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    try {
+      const blogs = await Blog.find({ visibility: "public" })
+        .populate("author", "username email")
+        .sort({ createdAt: -1 });
+
+      res.status(200).json(blogs);
+    } catch (error) {
+      console.error("Error fetching blogs for authenticated user:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+
+router.get(
+  "/myBlogs",
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    try {
+      const userId = req.userid;
+
+      const blogs = await Blog.find({ author: userId })
+        .populate("author", "username email")
+        .sort({ createdAt: -1 });
+
+      res.status(200).json(blogs);
+    } catch (error) {
+      console.error("Error fetching user's blogs:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
 
 module.exports = router;
