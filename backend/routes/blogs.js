@@ -67,13 +67,67 @@ router.get(
   })
 );
 
+// Specific routes must come BEFORE parameterized routes
+router.get(
+  "/getAllBlogs",
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    try {
+      const blogs = await Blog.find({ visibility: "public" })
+        .populate("author", "username email")
+        .sort({ createdAt: -1 });
+      res.status(200).json(blogs);
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+
+router.get(
+  "/getAllBlogsAuth",
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    try {
+      const blogs = await Blog.find({ visibility: "public" })
+        .populate("author", "username email")
+        .sort({ createdAt: -1 });
+
+      res.status(200).json(blogs);
+    } catch (error) {
+      console.error("Error fetching blogs for authenticated user:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+
+router.get(
+  "/myBlogs",
+  authMiddleware,
+  asyncHandler(async (req, res) => {
+    try {
+      const userId = req.userid;
+
+      const blogs = await Blog.find({ author: userId })
+        .populate("author", "username email")
+        .sort({ createdAt: -1 });
+
+      res.status(200).json(blogs);
+    } catch (error) {
+      console.error("Error fetching user's blogs:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
+
+// Parameterized route comes AFTER specific routes
 router.get(
   "/:id",
   authMiddleware,
   asyncHandler(async (req, res) => {
     // console.log(req.params.id);
     const blogId = req.params.id;
-    const userId = req.userid; 
+    const userId = req.userid;
 
     try {
       const blog = await Blog.findById(blogId).populate(
@@ -143,10 +197,10 @@ router.put(
       // console.log("Parsed data for update:", parsed.data);
       const updateData = { title, content };
       if (date) {
-        updateData.date = date; 
+        updateData.date = date;
       }
       if (visibility) {
-        updateData.visibility = visibility; 
+        updateData.visibility = visibility;
       }
       const updatedBlog = await Blog.findByIdAndUpdate(blogId, updateData, {
         new: true,
@@ -160,58 +214,6 @@ router.put(
       });
     } catch (error) {
       console.error("Error updating blog:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  })
-);
-
-router.get(
-  "/getAllBlogs",
-  authMiddleware,
-  asyncHandler(async (req, res) => {
-    try {
-      const blogs = await Blog.find({ visibility: "public" })
-        .populate("author", "username email")
-        .sort({ createdAt: -1 });
-      res.status(200).json(blogs);
-    } catch (error) {
-      console.error("Error fetching blogs:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  })
-);
-
-router.get(
-  "/getAllBlogsAuth",
-  authMiddleware,
-  asyncHandler(async (req, res) => {
-    try {
-      const blogs = await Blog.find({ visibility: "public" })
-        .populate("author", "username email")
-        .sort({ createdAt: -1 });
-
-      res.status(200).json(blogs);
-    } catch (error) {
-      console.error("Error fetching blogs for authenticated user:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  })
-);
-
-router.get(
-  "/myBlogs",
-  authMiddleware,
-  asyncHandler(async (req, res) => {
-    try {
-      const userId = req.userid;
-
-      const blogs = await Blog.find({ author: userId })
-        .populate("author", "username email")
-        .sort({ createdAt: -1 });
-
-      res.status(200).json(blogs);
-    } catch (error) {
-      console.error("Error fetching user's blogs:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   })
