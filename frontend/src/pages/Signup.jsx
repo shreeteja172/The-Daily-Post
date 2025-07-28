@@ -29,7 +29,7 @@ const Signup = () => {
         data
       );
       localStorage.setItem("token", response.data.token);
-      console.log("Response:", response);
+      // console.log("Response:", response);
       if (response.status === 201) {
         toast.success("Signup successful! Redirecting.......");
         setData({

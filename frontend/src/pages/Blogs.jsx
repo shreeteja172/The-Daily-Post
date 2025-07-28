@@ -1,14 +1,57 @@
-// import React, { useState} from "react";
+import React from "react";
 import Navigation from "../components/Navigation";
-
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useContext, useState } from "react";
+import { Context } from "../lib/contextapi";
+import CreateBlog from "../components/CreateBlog";
 const Blogs = () => {
+  const { token } = useContext(Context);
+  const [showCreateBlog, setShowCreateBlog] = useState(false);
+  console.log("Token:", token);
+
+  const {
+    data: posts = [],
+    isError,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["posts", token],
+    queryFn: async () => {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/blogs/getAllBlogs`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    },
+    enabled: !!token,
+  });
+
+  const userPosts = Array.isArray(posts)
+    ? posts.filter((post) => post.author && post.author._id === token)
+    : [];
+
   const handleCreatePost = () => {
-    console.log("Create new post");
+    setShowCreateBlog(true);
   };
+
+  console.log("Posts:", posts);
+
+  if (isError) {
+    console.error("Error fetching posts:", error);
+  }
+
+  if (isLoading) {
+    console.log("Loading posts...");
+  }
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
-      
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-black to-teal-600/10"></div>
         <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,.01)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
@@ -16,6 +59,28 @@ const Blogs = () => {
       <div className="absolute inset-0 bg-black/20"></div>
 
       <Navigation />
+
+      {showCreateBlog && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-black/90 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-white">
+                Create New Blog Post
+              </h2>
+              <button
+                onClick={() => setShowCreateBlog(false)}
+                className="text-emerald-400 hover:text-emerald-300 text-2xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            <CreateBlog
+              onClose={() => setShowCreateBlog(false)}
+              refetchPosts={refetch}
+            />
+          </div>
+        </div>
+      )}
 
       <main className="relative z-10 md:ml-24 pt-20 md:pt-8">
         <div className="max-w-7xl mx-auto px-6 py-8">
@@ -109,7 +174,7 @@ const Blogs = () => {
               </button>
             </div>
 
-            {loading ? (
+            {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[...Array(4)].map((_, index) => (
                   <div
@@ -124,33 +189,37 @@ const Blogs = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {userPosts.slice(0, 4).map((post, index) => (
-                  <div
-                    key={post.id}
-                    className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
-                  >
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <h3 className="text-white font-semibold mb-2 group-hover:text-emerald-400 transition-colors duration-300">
-                      {index === 0
-                        ? "A title and short description"
-                        : post.title}
-                    </h3>
-                    <p className="text-emerald-100/60 text-sm">
-                      {index === 0
-                        ? "Same content format as others..."
-                        : `${post.shortDescription.substring(0, 60)}...`}
-                    </p>
+                {Array.isArray(userPosts) && userPosts.length > 0 ? (
+                  userPosts.slice(0, 4).map((post, index) => (
+                    <div
+                      key={post._id || index}
+                      className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
+                    >
+                      <div className="w-full h-32 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
+                        <span className="text-emerald-100/60 text-sm">
+                          No Image
+                        </span>
+                      </div>
+                      <h3 className="text-white font-semibold mb-2 group-hover:text-emerald-400 transition-colors duration-300">
+                        {post.title || "A title and short description"}
+                      </h3>
+                      <p className="text-emerald-100/60 text-sm">
+                        {post.content
+                          ? `${post.content.substring(0, 60)}...`
+                          : "Same content format as others..."}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center text-emerald-100/60">
+                    You haven't created any blog posts yet. Click "Create Post"
+                    to get started!
                   </div>
-                ))}
+                )}
               </div>
             )}
           </div>
 
-          {/* Third Row - Other People's Blogs */}
           <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-white">
@@ -161,7 +230,7 @@ const Blogs = () => {
               </button>
             </div>
 
-            {loading ? (
+            {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[...Array(4)].map((_, index) => (
                   <div
@@ -176,31 +245,35 @@ const Blogs = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {posts.map((post, index) => (
-                  <div
-                    key={post.id}
-                    className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
-                  >
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="w-full h-32 object-cover rounded-lg mb-4 group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <h3 className="text-white font-semibold mb-2 group-hover:text-emerald-400 transition-colors duration-300">
-                      {index === 0
-                        ? "A title and short description"
-                        : post.title}
-                    </h3>
-                    <p className="text-emerald-100/60 text-sm mb-2">
-                      {index === 0
-                        ? "Same content format..."
-                        : `${post.shortDescription.substring(0, 60)}...`}
-                    </p>
-                    <div className="text-emerald-100/40 text-xs">
-                      By {post.author}
+                {Array.isArray(posts) && posts.length > 0 ? (
+                  posts.map((post, index) => (
+                    <div
+                      key={post._id || index}
+                      className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
+                    >
+                      <div className="w-full h-32 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
+                        <span className="text-emerald-100/60 text-sm">
+                          No Image
+                        </span>
+                      </div>
+                      <h3 className="text-white font-semibold mb-2 group-hover:text-emerald-400 transition-colors duration-300">
+                        {post.title || "A title and short description"}
+                      </h3>
+                      <p className="text-emerald-100/60 text-sm mb-2">
+                        {post.content
+                          ? `${post.content.substring(0, 60)}...`
+                          : "Same content format..."}
+                      </p>
+                      <div className="text-emerald-100/40 text-xs">
+                        By {post.author?.username || "Unknown Author"}
+                      </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="col-span-full text-center text-emerald-100/60">
+                    No blog posts available yet.
                   </div>
-                ))}
+                )}
               </div>
             )}
           </div>
