@@ -26,7 +26,7 @@ router.post(
           error: "Invalid input",
         });
       }
-      const { title, content, visibility } = parsed.data;
+      const { title, content, date, visibility } = parsed.data;
       //   console.log("Parsed data:", parsed.data);
       const authorId = req.userid;
 
