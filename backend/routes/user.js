@@ -1,12 +1,14 @@
-const express = require("express");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const User = require("../models/db").User;
-const z = require("zod");
-const asyncHandler = require("express-async-handler");
+import express from "express";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { User } from "../models/db.js";
+import { z } from "zod";
+import asyncHandler from "express-async-handler";
+import config from "../config.js";
+import { authMiddleware } from "../middlewares/auth.js";
+
 const router = express.Router();
-const { JWT_SECRET } = require("../config");
-const { authMiddleware } = require("../middlewares/auth");
+const { JWT_SECRET } = config;
 
 const registerSchema = z.object({
   firstName: z.string().min(1),
@@ -20,17 +22,13 @@ router.post(
   "/auth/register",
   asyncHandler(async (req, res) => {
     try {
-      // console.log("Request body:", req.body);
-      //   const { firstName, lastName, username, email, password } = req.body;
       const parsed = registerSchema.safeParse(req.body);
-      //   console.log("Parsed data:", parsed);
       if (!parsed.success) {
         return res.status(400).json({
           error: "Invalid input",
         });
       }
       const { username, email, password, firstName, lastName } = parsed.data;
-      // console.log("Registering user:", parsed.data);
 
       const existingUser = await User.findOne({ username });
       if (existingUser) {
@@ -58,7 +56,6 @@ router.post(
         token,
       });
     } catch (error) {
-      //   console.error(error);
       res.status(500).json({ message: "Server error" });
     }
   })
@@ -111,7 +108,6 @@ router.post(
 router.get("/profile", authMiddleware, async (req, res) => {
   try {
     const userId = req.userid;
-    // console.log("User ID from middleware:", userId);
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -136,7 +132,6 @@ const updateBody = z.object({
 
 router.put("/profile", authMiddleware, async (req, res) => {
   const userId = req.userid;
-  // console.log("User ID from middleware:", userId);
   if (!userId) {
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -176,7 +171,6 @@ router.put("/profile", authMiddleware, async (req, res) => {
 
 router.delete("/profile", authMiddleware, async (req, res) => {
   const userId = req.userid;
-  // console.log("User ID from middleware:", userId);
   if (!userId) {
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -191,6 +185,4 @@ router.delete("/profile", authMiddleware, async (req, res) => {
   }
 });
 
-// router.
-
-module.exports = router;
+export default router;

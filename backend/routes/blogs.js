@@ -1,8 +1,9 @@
-const express = require("express");
-const { Blog } = require("../models/db");
-const { authMiddleware } = require("../middlewares/auth");
-const z = require("zod");
-const asyncHandler = require("express-async-handler");
+import express from "express";
+import { Blog } from "../models/db.js";
+import { authMiddleware } from "../middlewares/auth.js";
+import z from "zod";
+import asyncHandler from "express-async-handler";
+
 const router = express.Router();
 
 const createBlogSchema = z.object({
@@ -10,6 +11,7 @@ const createBlogSchema = z.object({
   content: z.string().min(5),
   date: z.string().datetime().optional(),
   visibility: z.enum(["public", "private"]).optional().default("public"),
+  imageUrl: z.string().url().optional().default(""),
 });
 
 router.post(
@@ -26,7 +28,7 @@ router.post(
           error: "Invalid input",
         });
       }
-      const { title, content, date, visibility } = parsed.data;
+      const { title, content, date, visibility,imageUrl } = parsed.data;
       //   console.log("Parsed data:", parsed.data);
       const authorId = req.userid;
 
@@ -35,7 +37,9 @@ router.post(
         content,
         date: date || new Date().toISOString(),
         visibility: visibility || "public",
+        imageUrl: imageUrl || "",
       });
+      console.log("New blog data:", newBlog);
       newBlog.author = authorId;
       const savedBlog = await newBlog.save();
       await savedBlog.populate("author", "username email");
@@ -83,25 +87,6 @@ router.get(
       res.status(200).json(blogs);
     } catch (error) {
       console.error("Error fetching blogs:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  })
-);
-
-router.get(
-  "/getAllBlogsAuth",
-  authMiddleware,
-  asyncHandler(async (req, res) => {
-    try {
-      const blogs = await Blog.find({
-        $or: [{ visibility: "public" }, { visibility: { $exists: false } }],
-      })
-        .populate("author", "username email")
-        .sort({ createdAt: -1 });
-
-      res.status(200).json(blogs);
-    } catch (error) {
-      console.error("Error fetching blogs for authenticated user:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   })
@@ -158,6 +143,8 @@ router.get(
     }
   })
 );
+
+
 router.delete(
   "/:id",
   authMiddleware,
@@ -171,7 +158,7 @@ router.delete(
     try {
       const blog = await Blog.findByIdAndDelete(blogId);
       if (!blog) {
-        return res.status(404).json({ messafe: "Blog Not Found" });
+        return res.status(404).json({ message: "Blog Not Found" });
       }
       res.status(200).json({ message: "Blog Deleted Successfully" });
     } catch (error) {
@@ -197,11 +184,14 @@ router.put(
           error: "Invalid input",
         });
       }
-      const { title, content, date, visibility } = parsed.data;
+      const { title, content, date, visibility,imageUrl } = parsed.data;
       // console.log("Parsed data for update:", parsed.data);
       const updateData = { title, content };
       if (date) {
         updateData.date = date;
+      }
+      if (imageUrl) {
+        updateData.imageUrl = imageUrl;
       }
       if (visibility) {
         updateData.visibility = visibility;
@@ -223,4 +213,4 @@ router.put(
   })
 );
 
-module.exports = router;
+export default router;

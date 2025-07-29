@@ -1,7 +1,6 @@
-const mongoose = require("mongoose");
-const config = require("../config");
-
-const bcrypt = require("bcrypt");
+import mongoose from "mongoose";
+import config from "../config.js";
+import bcrypt from "bcrypt";
 
 mongoose
   .connect(config.MONGO_URL)
@@ -78,6 +77,10 @@ const blogSchema = new mongoose.Schema(
       default: "public",
       required: true,
     },
+    imageUrl: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
@@ -86,7 +89,4 @@ const blogSchema = new mongoose.Schema(
 
 const Blog = mongoose.model("Blog", blogSchema);
 
-module.exports = {
-  User,
-  Blog,
-};
+export { User, Blog };
