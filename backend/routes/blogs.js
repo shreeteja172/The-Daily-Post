@@ -79,11 +79,17 @@ router.get(
   authMiddleware,
   asyncHandler(async (req, res) => {
     try {
+      const userId = req.userid;
+      
       const blogs = await Blog.find({
-        $or: [{ visibility: "public" }, { visibility: { $exists: false } }],
+        $and: [
+          { author: { $ne: userId } }, 
+          { $or: [{ visibility: "public" }, { visibility: { $exists: false } }] }
+        ]
       })
         .populate("author", "username email")
         .sort({ createdAt: -1 });
+      
       res.status(200).json(blogs);
     } catch (error) {
       console.error("Error fetching blogs:", error);
