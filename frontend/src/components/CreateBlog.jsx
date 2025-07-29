@@ -3,17 +3,19 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Context } from "../lib/contextapi";
+import { UploadDropzone } from "../lib/uploadthing";
 
-const CreatePost = ({ onClose, refetchPosts }) => {
+const CreateBlog = ({ onClose, refetchPosts }) => {
   const { token } = useContext(Context);
   const [data, setData] = useState({
     title: "",
     description: "",
     content: "",
-    img: "",
+    imageUrl: "",
     date: new Date().toISOString().split("T")[0], // Default to today's date
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
 
   const handleCreatePost = async (e) => {
     e.preventDefault();
@@ -24,6 +26,7 @@ const CreatePost = ({ onClose, refetchPosts }) => {
         content: data.content,
         date: new Date(data.date).toISOString(),
         visibility: "public",
+        imageUrl: uploadedImageUrl || data.imageUrl, // Use uploaded image or fallback to manual URL
       };
 
       const response = await axios.post(
@@ -41,9 +44,10 @@ const CreatePost = ({ onClose, refetchPosts }) => {
           title: "",
           description: "",
           content: "",
-          img: "",
+          imageUrl: "",
           date: new Date().toISOString().split("T")[0],
         });
+        setUploadedImageUrl("");
         if (refetchPosts) {
           refetchPosts();
         }
@@ -129,17 +133,69 @@ const CreatePost = ({ onClose, refetchPosts }) => {
         </div>
 
         <div>
-          <label htmlFor="img" className="block mb-1 font-medium text-white">
-            Image URL (Optional)
+          <label className="block mb-1 font-medium text-white">
+            Upload Image
+          </label>
+          <div className="border-2 border-dashed border-emerald-500/20 rounded-lg p-4">
+            {uploadedImageUrl ? (
+              <div className="space-y-2">
+                <img
+                  src={uploadedImageUrl}
+                  alt="Uploaded preview"
+                  className="w-full h-48 object-cover rounded"
+                />
+                <button
+                  type="button"
+                  onClick={() => setUploadedImageUrl("")}
+                  className="text-red-400 hover:text-red-300 text-sm"
+                >
+                  Remove Image
+                </button>
+              </div>
+            ) : (
+              <UploadDropzone
+                endpoint="image"
+                onClientUploadComplete={(res) => {
+                  if (res && res[0]) {
+                    setUploadedImageUrl(res[0].url);
+                    toast.success("Image uploaded successfully!");
+                  }
+                }}
+                onUploadError={(error) => {
+                  toast.error(`Upload failed: ${error.message}`);
+                }}
+                appearance={{
+                  container: "border-emerald-500/20",
+                  uploadIcon: "text-emerald-500",
+                  label: "text-white",
+                  allowedContent: "text-gray-300",
+                }}
+              />
+            )}
+          </div>
+        </div>
+
+        <div>
+          <label
+            htmlFor="imageUrl"
+            className="block mb-1 font-medium text-white"
+          >
+            Or Enter Image URL (Optional)
           </label>
           <input
             type="url"
-            id="img"
-            value={data.img}
-            onChange={(e) => setData({ ...data, img: e.target.value })}
+            id="imageUrl"
+            value={data.imageUrl}
+            onChange={(e) => setData({ ...data, imageUrl: e.target.value })}
             className="w-full p-2 bg-black/30 border border-emerald-500/20 rounded focus:outline-none focus:ring-2 focus:ring-emerald-500 text-white"
             placeholder="https://example.com/image.jpg"
+            disabled={!!uploadedImageUrl} 
           />
+          {uploadedImageUrl && (
+            <p className="text-sm text-gray-400 mt-1">
+              Image upload takes priority over URL input
+            </p>
+          )}
         </div>
 
         <button
@@ -154,4 +210,4 @@ const CreatePost = ({ onClose, refetchPosts }) => {
   );
 };
 
-export default CreatePost;
+export default CreateBlog;
