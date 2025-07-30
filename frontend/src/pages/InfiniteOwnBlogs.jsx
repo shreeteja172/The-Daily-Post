@@ -167,7 +167,7 @@ const InfiniteOwnBlogs = () => {
                   Start sharing your thoughts with the world!
                 </p>
                 <button
-                  onClick={() => navigate("/posts")}
+                  onClick={() => navigate("/blogs")}
                   className="mt-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-2 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30"
                 >
                   Create Your First Post

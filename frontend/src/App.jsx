@@ -8,7 +8,7 @@ import Blogs from "./pages/Blogs";
 import AllBlogs from "./components/AllBlogs";
 import InfiniteBlogsAll from "./pages/InfiniteBlogsAll";
 import InfiniteOwnBlogs from "./pages/InfiniteOwnBlogs";
-import CreateBlog from "./components/CreateBlog";
+import CreateBlogPage from "./pages/CreateBlogPage";
 function App() {
   return (
     <div>
@@ -19,8 +19,8 @@ function App() {
         <Route path="/register" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/blogs" element={<Blogs />} />
-        <Route path="/posts" element={<Blogs />} />
-        <Route path="/create-blog" element={<CreateBlog />} />
+        <Route path="/blogs" element={<Blogs />} />
+        <Route path="/create-blog" element={<CreateBlogPage />} />
         <Route path="/all-blogs" element={<InfiniteBlogsAll />} />
         <Route path="/my-blogs" element={<InfiniteOwnBlogs />} />
 

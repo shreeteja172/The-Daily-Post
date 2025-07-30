@@ -50,13 +50,12 @@ const Blogs = () => {
         username: ownResponse.username,
       };
     },
-    staleTime: 1000 * 60 * 0.1, 
+    staleTime: 1000 * 60 * 0.1,
     enabled: !!token,
   });
 
-  // Extract posts and current user from response
   const posts = responseData?.posts || [];
-  const userPosts = responseData?.currentUser || []; // This is the data from fetchown/myBlogs
+  const userPosts = responseData?.currentUser || [];
 
   const handleCreatePost = () => {
     setShowCreateBlog(true);
@@ -76,23 +75,46 @@ const Blogs = () => {
       <Navigation />
 
       {showCreateBlog && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-black/90 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10 max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-white">
-                Create New Blog Post
-              </h2>
-              <button
-                onClick={() => setShowCreateBlog(false)}
-                className="text-emerald-400 hover:text-emerald-300 text-2xl font-bold"
-              >
-                ×
-              </button>
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-black/80 backdrop-blur-2xl rounded-3xl border border-emerald-500/30 shadow-2xl shadow-emerald-500/20 max-w-2xl w-full max-h-[95vh] overflow-y-auto">
+            <div className="sticky top-0 bg-black/60 backdrop-blur-xl border-b border-emerald-500/20 px-8 py-6 rounded-t-3xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-1">
+                    Create New Blog Post
+                  </h2>
+                  <p className="text-emerald-100/60 text-sm">
+                    Share your thoughts with the world
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowCreateBlog(false)}
+                  className="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 rounded-full p-2 transition-all duration-300"
+                  aria-label="Close modal"
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
-            <CreateBlog
-              onClose={() => setShowCreateBlog(false)}
-              refetchPosts={refetch}
-            />
+
+            <div className="px-8 py-6">
+              <CreateBlog
+                onClose={() => setShowCreateBlog(false)}
+                refetchPosts={refetch}
+              />
+            </div>
           </div>
         </div>
       )}
@@ -208,13 +230,21 @@ const Blogs = () => {
                 ))}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {userPosts?.length > 0 ? (
                   userPosts.map((post, index) => (
                     <div
                       key={post._id || index}
-                      className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-5 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 group"
+                      className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
                     >
+                      <div className="w-full h-32 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
+                        <img
+                          src={post.imageUrl || ""}
+                          alt={post.title || "Blog Post Image"}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                      </div>
+
                       <div className="flex justify-between items-start mb-4">
                         <h3 className="text-white font-semibold text-lg group-hover:text-emerald-400 transition-colors duration-300">
                           {post.title || "Untitled Post"}
@@ -253,7 +283,7 @@ const Blogs = () => {
                         </div>
                       </div>
 
-                      <p className="text-emerald-100/70 mb-4">
+                      <p className="text-emerald-100/60 text-sm mb-2">
                         {post.description || post.content
                           ? `${(post.description || post.content).substring(
                               0,
@@ -261,53 +291,12 @@ const Blogs = () => {
                             )}...`
                           : "No description available..."}
                       </p>
-
                       <div className="flex justify-between items-center">
                         <div className="text-emerald-100/40 text-sm">
                           Posted on{" "}
                           {post.date
                             ? new Date(post.date).toLocaleDateString()
                             : "Unknown date"}
-                        </div>
-                        <div className="flex items-center space-x-3">
-                          <span className="text-emerald-100/60 text-sm flex items-center">
-                            <svg
-                              className="w-4 h-4 mr-1"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                              />
-                            </svg>
-                            {post.views || 0}
-                          </span>
-                          <span className="text-emerald-100/60 text-sm flex items-center">
-                            <svg
-                              className="w-4 h-4 mr-1"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-                              />
-                            </svg>
-                            {post.comments?.length || 0}
-                          </span>
                         </div>
                       </div>
                     </div>
@@ -351,7 +340,7 @@ const Blogs = () => {
                 View All
               </button>
             </div>
-
+            {console.log(posts)}
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[...Array(4)].map((_, index) => (
@@ -374,9 +363,11 @@ const Blogs = () => {
                       className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
                     >
                       <div className="w-full h-32 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
-                        <span className="text-emerald-100/60 text-sm">
-                          No Image
-                        </span>
+                        <img
+                          src={post.imageUrl || ""}
+                          alt={post.title || "Blog Post Image"}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
                       </div>
                       <h3 className="text-white font-semibold mb-2 group-hover:text-emerald-400 transition-colors duration-300">
                         {post.title || "Untitled Post"}

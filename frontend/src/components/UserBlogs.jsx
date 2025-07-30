@@ -60,7 +60,7 @@ const UserBlogs = () => {
               <h3 className="text-xl font-semibold text-gray-800 mb-2">
                 {blog.title}
               </h3>
-
+            
               {blog.imageUrl && (
                 <div className="my-3">
                   <img

@@ -26,7 +26,7 @@ const CreateBlog = ({ onClose, refetchPosts }) => {
         content: data.content,
         date: new Date(data.date).toISOString(),
         visibility: "public",
-        imageUrl: uploadedImageUrl || data.imageUrl, // Use uploaded image or fallback to manual URL
+        imageUrl: uploadedImageUrl || data.imageUrl,
       };
 
       const response = await axios.post(
@@ -182,6 +182,7 @@ const CreateBlog = ({ onClose, refetchPosts }) => {
           >
             Or Enter Image URL (Optional)
           </label>
+          {console.log("Uploaded Image URL:", uploadedImageUrl)}
           <input
             type="url"
             id="imageUrl"
