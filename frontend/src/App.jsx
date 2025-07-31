@@ -9,20 +9,22 @@ import AllBlogs from "./components/AllBlogs";
 import InfiniteBlogsAll from "./pages/InfiniteBlogsAll";
 import InfiniteOwnBlogs from "./pages/InfiniteOwnBlogs";
 import CreateBlogPage from "./pages/CreateBlogPage";
+import RequireAuth from "./components/RequireAuth";
 function App() {
   return (
     <div>
       <Toaster position="top-right" />
       <Routes>
+        <Route element={<RequireAuth />}>
+          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/all-blogs" element={<InfiniteBlogsAll />} />
+          <Route path="/my-blogs" element={<InfiniteOwnBlogs />} />
+          <Route path="/create-blog" element={<CreateBlogPage />} />
+        </Route>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
-        <Route path="/blogs" element={<Blogs />} />
-        <Route path="/blogs" element={<Blogs />} />
-        <Route path="/create-blog" element={<CreateBlogPage />} />
-        <Route path="/all-blogs" element={<InfiniteBlogsAll />} />
-        <Route path="/my-blogs" element={<InfiniteOwnBlogs />} />
 
       </Routes>
     </div>

@@ -7,27 +7,6 @@ import { useContext } from "react";
 const UserBlogs = () => {
   const { token } = useContext(Context);
 
-  // const [blogs, setBlogs] = useState([]);
-  // const [loading, setLoading] = useState(true);
-  // useEffect(() => {
-  //   const fetchBlogs = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `${import.meta.env.VITE_BACKEND_URL}/api/blogs/`
-  //       );
-  //       setBlogs(response.data);
-  //       setLoading(false);
-  //       console.log("Fetched blogs:", response.data);
-  //       toast.success("Blogs loaded successfully");
-  //     } catch (error) {
-  //       console.error("Error fetching blogs:", error);
-  //       toast.error("Failed to load blogs");
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchBlogs();
-  // }, []);
   const { data: blogs, isLoading } = useQuery({
     queryKey: ["userBlogs"],
     queryFn: async () => {
@@ -44,6 +23,15 @@ const UserBlogs = () => {
       return response.data;
     },
   });
+   if (!token) {
+    return (
+      <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-md rounded">
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Please log in to view your blogs
+        </h2>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-md rounded">
