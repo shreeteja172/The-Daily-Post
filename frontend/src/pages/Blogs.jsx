@@ -4,10 +4,12 @@ import axios from "axios";
 import { useContext, useState } from "react";
 import { Context } from "../lib/contextapi";
 import CreateBlog from "../components/CreateBlog";
+import { useNavigate } from "react-router-dom";
 
 const Blogs = () => {
   const { token } = useContext(Context);
   const [showCreateBlog, setShowCreateBlog] = useState(false);
+  const navigate = useNavigate();
 
   const fetchOthers = async () => {
     const response = await axios.get(
@@ -58,7 +60,7 @@ const Blogs = () => {
   const userPosts = responseData?.currentUser || [];
 
   const handleCreatePost = () => {
-    setShowCreateBlog(true);
+    navigate("/create-blog");
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -76,7 +78,7 @@ const Blogs = () => {
 
       {showCreateBlog && (
         <div className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="bg-black/80 backdrop-blur-2xl rounded-3xl border border-emerald-500/30 shadow-2xl shadow-emerald-500/20 max-w-2xl w-full max-h-[95vh] overflow-y-auto">
+          <div className="mx-full bg-black/80 backdrop-blur-2xl rounded-3xl border border-emerald-500/30 shadow-2xl shadow-emerald-500/20 max-w-2xl w-full max-h-[95vh] overflow-y-auto">
             <div className="sticky top-0 bg-black/60 backdrop-blur-xl border-b border-emerald-500/20 px-8 py-6 rounded-t-3xl">
               <div className="flex items-center justify-between">
                 <div>
@@ -120,7 +122,7 @@ const Blogs = () => {
       )}
 
       <main className="relative z-10 md:ml-24 pt-20 md:pt-8">
-        <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="max-full mx-auto px-6 py-8">
           <div className="grid lg:grid-cols-2 gap-8 mb-8">
             <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
               <h2 className="text-2xl font-bold text-white mb-6">
@@ -235,6 +237,7 @@ const Blogs = () => {
                   userPosts.map((post, index) => (
                     <div
                       key={post._id || index}
+                      onClick={() => navigate(`/blogs/${post._id}`)}
                       className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
                     >
                       <div className="w-full h-32 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
@@ -340,7 +343,7 @@ const Blogs = () => {
                 View All
               </button>
             </div>
-            {console.log(posts)}
+            {/* {console.log(posts)} */}
             {isLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[...Array(4)].map((_, index) => (

@@ -17,7 +17,7 @@ const fetchAllBlogs = async ({ pageParam }) => {
       },
     }
   );
-  console.log("Fetched my blogs:", response.data);
+  // console.log("Fetched my blogs:", response.data);
   toast.success("My blogs loaded successfully");
   return response.data;
 };

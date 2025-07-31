@@ -5,11 +5,11 @@ import { Toaster } from "react-hot-toast";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Blogs from "./pages/Blogs";
-import AllBlogs from "./components/AllBlogs";
 import InfiniteBlogsAll from "./pages/InfiniteBlogsAll";
 import InfiniteOwnBlogs from "./pages/InfiniteOwnBlogs";
 import CreateBlogPage from "./pages/CreateBlogPage";
 import RequireAuth from "./components/RequireAuth";
+import BlogDetails from "./pages/BlogDetails";
 function App() {
   return (
     <div>
@@ -20,12 +20,12 @@ function App() {
           <Route path="/all-blogs" element={<InfiniteBlogsAll />} />
           <Route path="/my-blogs" element={<InfiniteOwnBlogs />} />
           <Route path="/create-blog" element={<CreateBlogPage />} />
+          <Route path="/blogs/:_id" element={<BlogDetails />} />
         </Route>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
-
       </Routes>
     </div>
   );

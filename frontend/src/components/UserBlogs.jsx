@@ -18,7 +18,7 @@ const UserBlogs = () => {
           },
         }
       );
-      console.log("user:", response);
+      // console.log("user:", response);
       toast.success("Blogs loaded successfully");
       return response.data;
     },

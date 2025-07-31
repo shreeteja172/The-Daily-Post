@@ -1,7 +1,6 @@
 import React from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import Navigation from "./Navigation";
 import BlogCard from "./BlogCard";
 import { useQuery } from "@tanstack/react-query";
@@ -17,7 +16,7 @@ const AllBlogs = () => {
           },
         }
       );
-      console.log("Fetched all blogs:", response.data);
+      // console.log("Fetched all blogs:", response.data);
       toast.success("All blogs loaded successfully");
       return response.data;
     },
