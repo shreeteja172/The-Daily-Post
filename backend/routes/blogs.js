@@ -28,7 +28,7 @@ router.post(
           error: "Invalid input",
         });
       }
-      const { title, content, date, visibility,imageUrl } = parsed.data;
+      const { title, content, date, visibility, imageUrl } = parsed.data;
       //   console.log("Parsed data:", parsed.data);
       const authorId = req.userid;
 
@@ -39,7 +39,7 @@ router.post(
         visibility: visibility || "public",
         imageUrl: imageUrl || "",
       });
-      console.log("New blog data:", newBlog);
+      // console.log("New blog data:", newBlog);
       newBlog.author = authorId;
       const savedBlog = await newBlog.save();
       await savedBlog.populate("author", "username email");
@@ -80,16 +80,18 @@ router.get(
   asyncHandler(async (req, res) => {
     try {
       const userId = req.userid;
-      
+
       const blogs = await Blog.find({
         $and: [
-          { author: { $ne: userId } }, 
-          { $or: [{ visibility: "public" }, { visibility: { $exists: false } }] }
-        ]
+          { author: { $ne: userId } },
+          {
+            $or: [{ visibility: "public" }, { visibility: { $exists: false } }],
+          },
+        ],
       })
         .populate("author", "username email")
         .sort({ createdAt: -1 });
-      
+
       res.status(200).json(blogs);
     } catch (error) {
       console.error("Error fetching blogs:", error);
@@ -150,13 +152,12 @@ router.get(
   })
 );
 
-
 router.delete(
   "/:id",
   authMiddleware,
   asyncHandler(async (req, res) => {
     const userId = req.userid;
-    console.log("User ID from middleware:", userId);
+    // console.log("User ID from middleware:", userId);
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -190,7 +191,7 @@ router.put(
           error: "Invalid input",
         });
       }
-      const { title, content, date, visibility,imageUrl } = parsed.data;
+      const { title, content, date, visibility, imageUrl } = parsed.data;
       // console.log("Parsed data for update:", parsed.data);
       const updateData = { title, content };
       if (date) {
@@ -218,5 +219,57 @@ router.put(
     }
   })
 );
+
+// const saveHtmlSchema = z.object({
+//   htmlContent: z.string().min(1),
+// });
+
+// router.post(
+//   "/saveHtml",
+//   authMiddleware,
+//   asyncHandler(async (req, res) => {
+//     const userId = req.userid;
+//     if (!userId) {
+//       return res.status(401).json({ message: "Unauthorized" });
+//     }
+//     try {
+//       const parsed = saveHtmlSchema.safeParse(req.body);
+//       if (!parsed.success) {
+//         return res.status(400).json({
+//           error: "Invalid input",
+//         });
+//       }
+//       const { htmlContent } = parsed.data;
+//       // console.log(htmlContent);
+//       res
+//         .status(200)
+//         .json({ message: "HTML content saved successfully", htmlContent });
+//     } catch (error) {
+//       console.error("Error saving HTML content:", error);
+//       res.status(500).json({ message: "Internal server error" });
+//     }
+//   })
+// );
+
+// router.get(
+//   "/getHtml",
+//   authMiddleware,
+//   asyncHandler(async (req, res) => {
+//     const userId = req.userid;
+//     if (!userId) {
+//       return res.status(401).json({ message: "Unauthorized" });
+//     }
+//     try {
+//       const sampleHtmlContent = "<p>This is a sample HTML content.</p>";
+//       res.status(200).json({
+//         message: "HTML content retrieved successfully",
+//         htmlContent: sampleHtmlContent,
+//       });
+//     } catch (error) {
+//       console.error("Error retrieving HTML content:", error);
+//       res.status(500).json({ message: "Internal server error" });
+//     }
+//   })
+// );
 
 export default router;

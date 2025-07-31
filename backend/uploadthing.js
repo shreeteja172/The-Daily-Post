@@ -10,6 +10,7 @@ export const uploadRouter = {
       allowedFileTypes: ["image/jpeg", "image/png", "image/gif"],
     },
   }).onUploadComplete(async (file) => {
-    console.log("✅ File uploaded:", file);
+    // console.log("✅ File uploaded:", file);
+    return { fileUrl: file.url };
   }),
 };
