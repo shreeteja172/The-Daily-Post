@@ -7,6 +7,7 @@ import axios from "axios";
 const gettoken = () => {
   return localStorage.getItem("token");
 };
+
 const ContextProvider = ({ children }) => {
   const [token, setToken] = useState(gettoken());
 
@@ -31,14 +32,30 @@ const ContextProvider = ({ children }) => {
     enabled: !!token,
   });
 
+  const {data: userData, isLoading: Loading, isError: UserError} = useQuery({
+    queryKey: ["userData", token],
+    queryFn: async () => {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/profile`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    },
+    enabled: !!token,
+  });
+
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
+  if (Loading) return <div>Loading user data...</div>;
+  if (UserError) return <div>Error fetching user data: {UserError.message}</div>;
 
-
-
-  return (
+  return (  
     <Context.Provider
-      value={{ token, setToken, posts, isError, isLoading, error }}
+      value={{ token, setToken,userData,Loading,UserError, posts, isError, isLoading, error }}
     >
       {children}
     </Context.Provider>

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import { useContext } from "react";
+import { Context } from "../lib/contextapi";
 const Navigation = () => {
+  const { userData } = useContext(Context);
   const navigate = useNavigate();
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -147,7 +149,9 @@ const Navigation = () => {
           <div className="relative md:mb-2 mb-0">
             <div className="md:w-12 md:h-12 w-8 h-8 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/50">
               <span className="text-white font-bold md:text-sm text-xs">
-                TDP
+                {userData?.firstName?.charAt(0)?.toUpperCase()}
+                {userData?.lastName?.charAt(0)?.toUpperCase() ||
+                  userData?.username?.charAt(0)?.toUpperCase()}
               </span>
             </div>
           </div>

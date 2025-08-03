@@ -21,6 +21,7 @@ function App() {
           <Route path="/my-blogs" element={<InfiniteOwnBlogs />} />
           <Route path="/create-blog" element={<CreateBlogPage />} />
           <Route path="/blogs/:_id" element={<BlogDetails />} />
+          {/* <Route path="/settings" element={<Settings />} /> */}
         </Route>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />

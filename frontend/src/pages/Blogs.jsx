@@ -7,7 +7,8 @@ import CreateBlog from "../components/CreateBlog";
 import { useNavigate } from "react-router-dom";
 
 const Blogs = () => {
-  const { token } = useContext(Context);
+  
+  const { userData, token } = useContext(Context);
   const [showCreateBlog, setShowCreateBlog] = useState(false);
   const navigate = useNavigate();
 
@@ -33,6 +34,7 @@ const Blogs = () => {
     );
     return response.data;
   };
+  console.log(userData);
 
   const {
     data: responseData,
