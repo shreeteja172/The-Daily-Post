@@ -10,6 +10,8 @@ import InfiniteOwnBlogs from "./pages/InfiniteOwnBlogs";
 import CreateBlogPage from "./pages/CreateBlogPage";
 import RequireAuth from "./components/RequireAuth";
 import BlogDetails from "./pages/BlogDetails";
+import Settings from "./pages/Settings";
+import About from "./pages/About";
 function App() {
   return (
     <div>
@@ -21,7 +23,8 @@ function App() {
           <Route path="/my-blogs" element={<InfiniteOwnBlogs />} />
           <Route path="/create-blog" element={<CreateBlogPage />} />
           <Route path="/blogs/:_id" element={<BlogDetails />} />
-          {/* <Route path="/settings" element={<Settings />} /> */}
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/about" element={<About />} />
         </Route>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />

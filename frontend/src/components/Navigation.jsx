@@ -6,12 +6,15 @@ const Navigation = () => {
   const { userData } = useContext(Context);
   const navigate = useNavigate();
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    // Initialize with the actual token state to prevent flash
+    return !!localStorage.getItem("token");
+  });
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
-  }, [location]);
+  }, []); 
 
   const handleScrollToSection = (sectionId) => {
     if (location.pathname === "/") {
@@ -91,7 +94,7 @@ const Navigation = () => {
           d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
         />
       ),
-      onClick: () => handleScrollToSection("about"),
+      onClick: () => navigate("/about"),
       title: "About",
     },
   ];
@@ -147,24 +150,28 @@ const Navigation = () => {
       <div className="bg-black/50 backdrop-blur-xl rounded-full md:px-4 md:py-6 px-3 py-2 shadow-2xl border border-emerald-500/30 shadow-emerald-500/20">
         <nav className="flex md:flex-col flex-row items-center md:space-y-6 md:space-x-0 space-x-3 space-y-0">
           <div className="relative md:mb-2 mb-0">
-            <div className="md:w-12 md:h-12 w-8 h-8 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/50">
+            <button
+              onClick={() => navigate("/settings")}
+              className="md:w-12 md:h-12 w-8 h-8 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 transition-all duration-300 hover:scale-105 cursor-pointer"
+              title="Settings"
+            >
               <span className="text-white font-bold md:text-sm text-xs">
                 {userData?.firstName?.charAt(0)?.toUpperCase()}
                 {userData?.lastName?.charAt(0)?.toUpperCase() ||
                   userData?.username?.charAt(0)?.toUpperCase()}
               </span>
-            </div>
+            </button>
           </div>
 
           {currentNavItems.map((item) => (
             <button
               key={item.id}
               onClick={item.onClick}
-              className="text-white/80 hover:text-white transition-all duration-300 md:p-3 p-2 rounded-full hover:bg-emerald-500/20 hover:shadow-sm hover:shadow-emerald-500/30 group"
+              className="nav-item text-white/80 hover:text-white transition-all duration-300 md:p-3 p-2 rounded-full hover:bg-emerald-500/20 hover:shadow-sm hover:shadow-emerald-500/30"
               title={item.title}
             >
               <svg
-                className="md:w-5 md:h-5 w-4 h-4 group-hover:scale-110 transition-transform"
+                className="md:w-5 md:h-5 w-4 h-4 hover:scale-110 transition-transform duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -179,11 +186,11 @@ const Navigation = () => {
           {isAuthenticated ? (
             <button
               onClick={handleLogout}
-              className="text-white/80 hover:text-white transition-all duration-300 md:p-3 p-2 rounded-full hover:bg-red-500/20 hover:shadow-sm hover:shadow-red-500/30 group"
+              className="logout-btn text-white/80 hover:text-white transition-all duration-300 md:p-3 p-2 rounded-full hover:bg-red-500/20 hover:shadow-sm hover:shadow-red-500/30"
               title="Logout"
             >
               <svg
-                className="md:w-5 md:h-5 w-4 h-4 group-hover:scale-110 transition-transform"
+                className="md:w-5 md:h-5 w-4 h-4 hover:scale-110 transition-transform duration-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -200,11 +207,11 @@ const Navigation = () => {
             <>
               <button
                 onClick={() => navigate("/signin")}
-                className="text-white/80 hover:text-white transition-all duration-300 md:p-3 p-2 rounded-full hover:bg-emerald-500/20 hover:shadow-sm hover:shadow-emerald-500/30 group"
+                className="login-btn text-white/80 hover:text-white transition-all duration-300 md:p-3 p-2 rounded-full hover:bg-emerald-500/20 hover:shadow-sm hover:shadow-emerald-500/30"
                 title="Login"
               >
                 <svg
-                  className="md:w-5 md:h-5 w-4 h-4 group-hover:scale-110 transition-transform"
+                  className="md:w-5 md:h-5 w-4 h-4 hover:scale-110 transition-transform duration-300"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -220,11 +227,11 @@ const Navigation = () => {
 
               <button
                 onClick={() => navigate("/signup")}
-                className="bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-700 text-white md:p-3 p-2 rounded-full transition-all duration-300 shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 group transform hover:scale-105"
+                className="signup-btn bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-700 text-white md:p-3 p-2 rounded-full transition-all duration-300 shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105"
                 title="Get Started"
               >
                 <svg
-                  className="md:w-5 md:h-5 w-4 h-4 group-hover:rotate-90 transition-transform duration-300"
+                  className="md:w-5 md:h-5 w-4 h-4 hover:rotate-90 transition-transform duration-300"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
