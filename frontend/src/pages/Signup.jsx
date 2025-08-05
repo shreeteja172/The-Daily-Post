@@ -1,8 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
-import { LoaderIcon, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 const Signup = () => {
   const navigate = useNavigate();
   // useEffect(() => {
@@ -18,49 +19,54 @@ const Signup = () => {
     email: "",
     password: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
-  const handleSignup = async (e) => {
-    e.preventDefault();
-
-    setIsLoading(true);
-    try {
+  const signupMutation = useMutation({
+    mutationFn: async (userData) => {
       const response = await axios.post(
         `${import.meta.env.VITE_BACKEND_URL}/api/user/auth/register`,
-        data
+        userData
       );
-      localStorage.setItem("token", response.data.token);
-      // console.log("Response:", response);
-      if (response.status === 201) {
-        toast.success("Signup successful! Redirecting.......");
-        setData({
-          firstName: "",
-          lastName: "",
-          username: "",
-          email: "",
-          password: "",
-        });
-        if(LoaderIcon){
-          LoaderIcon(<LoaderIcon className="animate-spin" />, {
-            duration: 2000,
-          });
-        }
-        setTimeout(() => {
-          navigate("/blogs");
-        }, 1000);
-      } else {
-        toast.error("Failed to register user");
-      }
-    } catch (error) {
+      return response.data;
+    },
+    onSuccess: (data) => {
+      localStorage.setItem("token", data.token);
+      toast.success("Signup successful! Redirecting.......");
+      setData({
+        firstName: "",
+        lastName: "",
+        username: "",
+        email: "",
+        password: "",
+      });
+      setTimeout(() => {
+        navigate("/blogs");
+      }, 1000);
+    },
+    onError: (error) => {
       console.error("Error during sign-up:", error);
       if (error.response?.data?.message) {
         toast.error(error.response.data.message);
       } else {
         toast.error("An error occurred during registration");
       }
-    } finally {
-      setIsLoading(false);
+    },
+  });
+
+  const handleSignup = (e) => {
+    e.preventDefault();
+    if (
+      !data.firstName ||
+      !data.lastName ||
+      !data.username ||
+      !data.email ||
+      !data.password
+    ) {
+      toast.error("Please fill in all fields");
+      return;
     }
+
+    signupMutation.mutate(data);
   };
+
   return (
     <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center py-8">
       <div className="absolute inset-0 overflow-hidden">
@@ -163,9 +169,9 @@ const Signup = () => {
             <button
               type="submit"
               className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 disabled:from-gray-600 disabled:to-gray-700 text-white py-3 px-4 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isLoading}
+              disabled={signupMutation.isPending}
             >
-              {isLoading ? (
+              {signupMutation.isPending ? (
                 <div className="flex items-center justify-center">
                   <svg
                     className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"

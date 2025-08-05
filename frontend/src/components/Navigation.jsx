@@ -7,7 +7,6 @@ const Navigation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    // Initialize with the actual token state to prevent flash
     return !!localStorage.getItem("token");
   });
 

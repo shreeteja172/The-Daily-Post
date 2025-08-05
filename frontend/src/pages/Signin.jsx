@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -10,9 +11,37 @@ const Signin = () => {
     username: "",
     password: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignin = async (e) => {
+  const signinMutation = useMutation({
+    mutationFn: async (userData) => {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/user/auth/login`,
+        userData
+      );
+      return response.data;
+    },
+    onSuccess: (data) => {
+      localStorage.setItem("token", data.token);
+      toast.success("Welcome Again!");
+      setData({
+        username: "",
+        password: "",
+      });
+      setTimeout(() => {
+        navigate("/blogs");
+      }, 1000);
+    },
+    onError: (error) => {
+      console.error("Error during sign-in:", error);
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An error occurred during sign-in");
+      }
+    },
+  });
+
+  const handleSignin = (e) => {
     e.preventDefault();
 
     if (!data.username || !data.password) {
@@ -20,37 +49,7 @@ const Signin = () => {
       return;
     }
 
-    setIsLoading(true);
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/user/auth/login`,
-        data
-      );
-      localStorage.setItem("token", response.data.token);
-      // console.log("Response:", response);
-      if (response.status === 200) {
-        toast.success("Welcome Again!");
-        setData({
-          username: "",
-          password: "",
-        });
-        // Redirect to home or dashboard
-        setTimeout(() => {
-          navigate("/blogs");
-        }, 2000);
-      } else {
-        toast.error("Failed to sign in");
-      }
-    } catch (error) {
-      console.error("Error during sign-in:", error);
-      if (error.response?.data?.message) {
-        toast.error(error.response.data.message);
-      } else {
-        toast.error("An error occurred during sign-in");
-      }
-    } finally {
-      setIsLoading(false);
-    }
+    signinMutation.mutate(data);
   };
   return (
     <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center">
@@ -62,7 +61,7 @@ const Signin = () => {
 
       <div className="relative z-10 w-full max-w-md mx-auto px-6">
         <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
-          {/* Logo/Header */}
+
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/50 mx-auto mb-4">
               <span className="text-white font-bold text-xl">TDP</span>
@@ -105,9 +104,9 @@ const Signin = () => {
             <button
               type="submit"
               className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 disabled:from-gray-600 disabled:to-gray-700 text-white py-3 px-4 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isLoading}
+              disabled={signinMutation.isPending}
             >
-              {isLoading ? (
+              {signinMutation.isPending ? (
                 <div className="flex items-center justify-center">
                   <svg
                     className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
