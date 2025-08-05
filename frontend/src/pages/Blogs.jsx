@@ -7,7 +7,6 @@ import CreateBlog from "../components/CreateBlog";
 import { useNavigate } from "react-router-dom";
 
 const Blogs = () => {
-  
   const { userData, token } = useContext(Context);
   const [showCreateBlog, setShowCreateBlog] = useState(false);
   const navigate = useNavigate();
@@ -126,16 +125,22 @@ const Blogs = () => {
       <main className="relative z-10 md:ml-24 pt-20 md:pt-8">
         <div className="max-full mx-auto px-6 py-8">
           <div className="grid lg:grid-cols-2 gap-8 mb-8">
-            <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
-              <h2 className="text-2xl font-bold text-white mb-6">
-                Share Your Thoughts
-              </h2>
-
-              <div className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-6">
-                <div className="flex items-start space-x-4 mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-lg">
+            <div
+              className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/40 p-0 shadow-2xl relative overflow-hidden group cursor-pointer transition-all duration-300 hover:scale-[1.02]"
+              onClick={handleCreatePost}
+              tabIndex={0}
+              role="button"
+              aria-label="Share your thoughts and create a post"
+            >
+              <div className="absolute inset-0 pointer-events-none z-0">
+                <div className="animate-pulse bg-gradient-to-br from-emerald-500/10 via-black/10 to-teal-600/20 w-full h-full rounded-2xl blur-xl"></div>
+                <div className="border-2 border-emerald-400/30 rounded-2xl absolute inset-0 animate-glow"></div>
+              </div>
+              <div className="relative z-10 p-8">
+                <div className="flex items-center mb-6 gap-3">
+                  <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-lg animate-avatar-pulse border-4 border-emerald-500/30">
                     <svg
-                      className="w-6 h-6 text-white"
+                      className="w-7 h-7 text-white drop-shadow-lg"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -148,27 +153,75 @@ const Blogs = () => {
                       />
                     </svg>
                   </div>
-                  <div className="flex-1">
-                    <div
-                      onClick={handleCreatePost}
-                      className="w-full bg-black/20 border border-emerald-500/20 rounded-xl p-4 text-emerald-100/60 cursor-pointer hover:border-emerald-500/40 hover:bg-black/30 transition-all duration-300 min-h-[120px] flex items-center"
+                  <h2 className="text-3xl font-extrabold text-white tracking-tight drop-shadow-lg">
+                    Share Your Thoughts
+                  </h2>
+                  <span className="ml-auto">
+                    <svg
+                      className="w-7 h-7 text-emerald-400 animate-float"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      Input interface for blog writing with all styles (bold,
-                      italic, colorful, etc.)
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 19l9-7-9-7-9 7 9 7z"
+                      />
+                    </svg>
+                  </span>
+                </div>
+                <div className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/20 p-6 shadow-lg shadow-emerald-500/10 relative">
+                  <div className="flex items-start space-x-4 mb-4">
+                    <div className="flex-1">
+                      <div className="w-full bg-black/20 border border-emerald-500/30 rounded-xl p-4 text-emerald-100/70 min-h-[120px] flex items-center text-lg font-medium transition-all duration-300 group-hover:border-emerald-400/50 group-hover:bg-black/40">
+                        <span className="mr-2 text-emerald-400 font-bold">
+                          ✍️
+                        </span>
+                        Write a blog post with all styles:{" "}
+                        <span className="font-bold text-white mx-1">bold</span>,{" "}
+                        <span className="italic text-emerald-300 mx-1">
+                          italic
+                        </span>
+                        , <span className="text-teal-400 mx-1">colorful</span>,{" "}
+                        <span className="bg-emerald-900/30 px-1 rounded text-emerald-200 mx-1">
+                          code
+                        </span>
+                        , and more!
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="text-emerald-100/40 text-sm">
-                    Support for rich text, images, and code snippets
+                  <div className="flex items-center justify-between mt-2">
+                    <div className="text-emerald-100/50 text-sm">
+                      <span className="inline-flex items-center gap-1">
+                        <svg
+                          className="w-4 h-4 text-emerald-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 10l4.553-2.276A2 2 0 0020 6.382V5a2 2 0 00-2-2H6a2 2 0 00-2 2v1.382a2 2 0 00.447 1.342L9 10m6 0v4m0 0l-6 3m6-3l6-3m-6 3l-6-3"
+                          />
+                        </svg>
+                        Rich text, images, code snippets
+                      </span>
+                    </div>
+                    <button
+                      className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-7 py-2 rounded-xl font-semibold shadow-lg shadow-emerald-500/30 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-400/60 active:scale-95 relative overflow-hidden"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCreatePost();
+                      }}
+                    >
+                      <span className="absolute left-0 top-0 w-full h-full bg-emerald-500/10 opacity-0 group-active:opacity-100 transition-all duration-300"></span>
+                      <span className="relative z-10">Create Post</span>
+                    </button>
                   </div>
-                  <button
-                    onClick={handleCreatePost}
-                    className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-2 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30"
-                  >
-                    Create Post
-                  </button>
                 </div>
               </div>
             </div>
