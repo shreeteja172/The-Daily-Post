@@ -1,381 +1,205 @@
-"use client";
+import React, { useEffect, useRef, useState } from "react";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
 
-import { useRef, useState, useCallback, useEffect } from "react";
-import {
-  Bold,
-  Italic,
-  Underline,
-  Strikethrough,
-  Code,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  List,
-  ListOrdered,
-  Link,
-  Undo,
-  Redo,
-  ChevronDown,
-} from "lucide-react";
+const TOOLBAR_OPTIONS = [
+  [{ font: [] }],
+  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+  [{ size: ["small", false, "large", "huge"] }],
+  ["bold", "italic", "underline", "strike", "blockquote", "code-block"],
+  [{ color: [] }, { background: [] }],
+  [{ script: "sub" }, { script: "super" }],
+  [{ list: "ordered" }, { list: "bullet" }, { indent: "-1" }, { indent: "+1" }],
+  [{ align: [] }],
+  ["link", "image"],
+  ["clean"],
+];
 
-const ToolbarButton = ({
-  onClick,
-  isActive = false,
-  disabled = false,
-  children,
-  title,
-  className = "",
-}) => {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      title={title}
-      className={`
-        flex items-center justify-center w-8 h-8 rounded transition-colors duration-200
-        ${
-          isActive
-            ? "bg-emerald-500/30 text-emerald-300 border border-emerald-500/40"
-            : "text-emerald-300 hover:bg-emerald-500/20 border border-transparent hover:border-emerald-500/30"
-        }
-        ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
-        ${className}
-      `}
-    >
-      {children}
-    </button>
-  );
-};
-
-const Dropdown = ({
-  value,
+const RichEditor = ({
+  value = "",
   onChange,
-  options,
-  placeholder,
-  className = "",
+  placeholder = "   Write something...",
+  outputFormat = "html",
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedLabel, setSelectedLabel] = useState(placeholder);
-
-  useEffect(() => {
-    const selected = options.find((opt) => opt.value === value);
-    if (selected) {
-      setSelectedLabel(selected.label);
-    }
-  }, [value, options]);
-
-  const handleSelect = (option) => {
-    onChange(option.value);
-    setSelectedLabel(option.label);
-    setIsOpen(false);
-  };
-
-  return (
-    <div className={`relative ${className}`}>
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between w-full px-3 py-1.5 text-sm bg-black/40 border border-emerald-500/30 rounded text-emerald-300 hover:bg-emerald-500/20 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-      >
-        <span>{selectedLabel}</span>
-        <ChevronDown
-          className={`w-4 h-4 transition-transform ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
-      </button>
-
-      {isOpen && (
-        <>
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setIsOpen(false)}
-          />
-          <div className="absolute top-full left-0 z-20 w-full mt-1 bg-black/90 border border-emerald-500/30 rounded shadow-lg max-h-60 overflow-auto backdrop-blur-sm">
-            {options.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => handleSelect(option)}
-                className="w-full px-3 py-2 text-left text-sm text-emerald-300 hover:bg-emerald-500/20 focus:outline-none focus:bg-emerald-500/20"
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
-
-const RichTextEditor = ({ value = "", onChange, className = "" }) => {
   const editorRef = useRef(null);
-  const [fontSize, setFontSize] = useState("3");
-  const [headingType, setHeadingType] = useState("div");
-  const [isEditorEmpty, setIsEditorEmpty] = useState(!value);
+  const quillRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const [isFocused, setIsFocused] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
-  const fontSizeOptions = [
-    { label: "12px", value: "1" },
-    { label: "14px", value: "2" },
-    { label: "16px", value: "3" },
-    { label: "18px", value: "4" },
-    { label: "24px", value: "5" },
-    { label: "32px", value: "6" },
-    { label: "48px", value: "7" },
-  ];
+  // Custom image handler with upload placeholder
+  const imageHandler = () => {
+    fileInputRef.current?.click();
+  };
 
-  const headingOptions = [
-    { label: "Paragraph", value: "div" },
-    { label: "Heading 1", value: "h1" },
-    { label: "Heading 2", value: "h2" },
-    { label: "Heading 3", value: "h3" },
-  ];
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith("image/")) {
+      setUploading(true);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64Image = event.target.result;
+        const quill = quillRef.current;
+        const range = quill.getSelection(true);
+        if (range) {
+          quill.insertEmbed(range.index, "image", base64Image, "user");
+          quill.setSelection(range.index + 1);
+        }
+        setUploading(false);
+      };
+      reader.readAsDataURL(file);
+    }
+    e.target.value = "";
+  };
 
-  const executeCommand = useCallback((command, value) => {
-    document.execCommand(command, false, value);
-    editorRef.current?.focus();
+  useEffect(() => {
+    let quill;
+    if (editorRef.current && !quillRef.current && !editorRef.current.__quill) {
+      quill = new Quill(editorRef.current, {
+        theme: "snow",
+        placeholder,
+        modules: {
+          toolbar: {
+            container: TOOLBAR_OPTIONS,
+            handlers: {
+              image: imageHandler,
+            },
+          },
+        },
+      });
+
+      quill.on("text-change", () => {
+        if (onChange) {
+          if (outputFormat === "delta") {
+            onChange(quill.getContents());
+          } else if (outputFormat === "both") {
+            onChange({
+              html: quill.root.innerHTML,
+              delta: quill.getContents(),
+            });
+          } else {
+            onChange(quill.root.innerHTML);
+          }
+        }
+      });
+
+      if (value) {
+        if (outputFormat === "delta" && typeof value === "object") {
+          quill.setContents(value);
+        } else if (outputFormat === "both" && value?.delta) {
+          quill.setContents(value.delta);
+        } else {
+          quill.root.innerHTML = value;
+        }
+      }
+
+      quill.root.addEventListener("focus", () => setIsFocused(true));
+      quill.root.addEventListener("blur", () => setIsFocused(false));
+
+      quillRef.current = quill;
+    }
+    return () => {
+      if (quillRef.current) {
+        quillRef.current.off && quillRef.current.off();
+        if (quillRef.current.root) {
+          quillRef.current.root.removeEventListener("focus", () =>
+            setIsFocused(true)
+          );
+          quillRef.current.root.removeEventListener("blur", () =>
+            setIsFocused(false)
+          );
+        }
+        if (quillRef.current.destroy) {
+          quillRef.current.destroy();
+        }
+        quillRef.current = null;
+      }
+    };
+    // eslint-disable-next-line
   }, []);
-
-  const handleUndo = () => executeCommand("undo");
-  const handleRedo = () => executeCommand("redo");
-
-  const handleBold = () => executeCommand("bold");
-  const handleItalic = () => executeCommand("italic");
-  const handleUnderline = () => executeCommand("underline");
-  const handleStrikethrough = () => executeCommand("strikeThrough");
-
-  const handleAlignLeft = () => executeCommand("justifyLeft");
-  const handleAlignCenter = () => executeCommand("justifyCenter");
-  const handleAlignRight = () => executeCommand("justifyRight");
-
-  const handleBulletList = () => executeCommand("insertUnorderedList");
-  const handleNumberedList = () => executeCommand("insertOrderedList");
-
-  const handleInlineCode = () => {
-    const selection = window.getSelection();
-    if (selection && selection.rangeCount > 0) {
-      const range = selection.getRangeAt(0);
-      const selectedText = range.toString();
-
-      if (selectedText) {
-        const codeElement = document.createElement("code");
-        codeElement.className =
-          "bg-gray-100 px-1 py-0.5 rounded text-sm font-mono text-red-600";
-        codeElement.textContent = selectedText;
-
-        range.deleteContents();
-        range.insertNode(codeElement);
-
-        selection.removeAllRanges();
-      }
-    }
-  };
-
-  const handleFontSizeChange = (newSize) => {
-    setFontSize(newSize);
-    executeCommand("fontSize", newSize);
-  };
-
-  const handleHeadingChange = (tag) => {
-    setHeadingType(tag);
-    executeCommand("formatBlock", tag);
-  };
-
-  const handleInsertLink = () => {
-    const url = prompt("Enter URL:");
-    if (url) {
-      executeCommand("createLink", url);
-    }
-  };
-
-  const handleEditorInput = () => {
-    if (editorRef.current) {
-      const content = editorRef.current.innerHTML;
-      const textContent = editorRef.current.textContent?.trim() || "";
-      const isEmpty = textContent === "";
-
-      setIsEditorEmpty(isEmpty);
-
-      if (isEmpty) {
-        editorRef.current.innerHTML = "";
-      }
-
-      if (onChange) {
-        onChange(content);
-      }
-    }
-  };
-
-  const isCommandActive = (command) => {
-    try {
-      return document.queryCommandState(command);
-    } catch {
-      return false;
-    }
-  };
-
   useEffect(() => {
-    if (editorRef.current && value !== editorRef.current.innerHTML) {
-      editorRef.current.innerHTML = value;
-      setIsEditorEmpty(!value || value.trim() === "");
+    const quill = quillRef.current;
+    if (!quill) return;
+    if (outputFormat === "delta" && typeof value === "object") {
+      if (JSON.stringify(quill.getContents()) !== JSON.stringify(value)) {
+        quill.setContents(value);
+      }
+    } else if (outputFormat === "both" && value?.delta) {
+      if (JSON.stringify(quill.getContents()) !== JSON.stringify(value.delta)) {
+        quill.setContents(value.delta);
+      }
+    } else if (outputFormat === "html" && value !== quill.root.innerHTML) {
+      const selection = quill.getSelection();
+      quill.root.innerHTML = value || "";
+      if (selection) {
+        quill.setSelection(selection.index, selection.length);
+      }
     }
-  }, [value]);
-
-  useEffect(() => {
-    if (editorRef.current) {
-      setIsEditorEmpty(!value || editorRef.current.textContent?.trim() === "");
-    }
-  }, [value]);
+  }, [value, outputFormat]);
 
   return (
     <div
-      className={`w-full h-full bg-black/40 border border-emerald-500/30 rounded-xl shadow-lg backdrop-blur-sm ${className}`}
+      style={{
+        border: isFocused ? "2px solid #4f8cff" : "1px solid #ddd",
+        borderRadius: "12px",
+        background: "linear-gradient(135deg, #f8fafc 0%, #e9f0fb 100%)",
+        boxShadow: isFocused
+          ? "0 4px 16px 0 rgba(79,140,255,0.10)"
+          : "0 1px 4px rgba(0,0,0,0.05)",
+        overflow: "hidden",
+        transition: "all 0.2s cubic-bezier(.4,2,.6,1)",
+        margin: "0 auto",
+        maxWidth: 700,
+        width: "100%",
+      }}
     >
-      <div className="flex items-center gap-2 p-4 border-b border-emerald-500/20 bg-black/20 rounded-t-xl flex-wrap">
-        <div className="flex items-center gap-1">
-          <ToolbarButton onClick={handleUndo} title="Undo (Ctrl+Z)">
-            <Undo className="h-4 w-4" />
-          </ToolbarButton>
-          <ToolbarButton onClick={handleRedo} title="Redo (Ctrl+Y)">
-            <Redo className="h-4 w-4" />
-          </ToolbarButton>
-        </div>
-
-        <div className="w-px h-6 bg-emerald-500/30" />
-
-        <Dropdown
-          value={fontSize}
-          onChange={handleFontSizeChange}
-          options={fontSizeOptions}
-          placeholder="16px"
-          className="w-20"
-        />
-
-        <Dropdown
-          value={headingType}
-          onChange={handleHeadingChange}
-          options={headingOptions}
-          placeholder="Paragraph"
-          className="w-28"
-        />
-
-        <div className="w-px h-6 bg-emerald-500/30" />
-
-        <div className="flex items-center gap-1">
-          <ToolbarButton
-            onClick={handleBold}
-            isActive={isCommandActive("bold")}
-            title="Bold (Ctrl+B)"
-          >
-            <Bold className="h-4 w-4" />
-          </ToolbarButton>
-          <ToolbarButton
-            onClick={handleItalic}
-            isActive={isCommandActive("italic")}
-            title="Italic (Ctrl+I)"
-          >
-            <Italic className="h-4 w-4" />
-          </ToolbarButton>
-          <ToolbarButton
-            onClick={handleUnderline}
-            isActive={isCommandActive("underline")}
-            title="Underline (Ctrl+U)"
-          >
-            <Underline className="h-4 w-4" />
-          </ToolbarButton>
-          <ToolbarButton
-            onClick={handleStrikethrough}
-            isActive={isCommandActive("strikeThrough")}
-            title="Strikethrough"
-          >
-            <Strikethrough className="h-4 w-4" />
-          </ToolbarButton>
-          <ToolbarButton onClick={handleInlineCode} title="Inline Code">
-            <Code className="h-4 w-4" />
-          </ToolbarButton>
-        </div>
-
-        <div className="w-px h-6 bg-emerald-500/30" />
-
-        <div className="flex items-center gap-1">
-          <ToolbarButton
-            onClick={handleAlignLeft}
-            isActive={isCommandActive("justifyLeft")}
-            title="Align Left"
-          >
-            <AlignLeft className="h-4 w-4" />
-          </ToolbarButton>
-          <ToolbarButton
-            onClick={handleAlignCenter}
-            isActive={isCommandActive("justifyCenter")}
-            title="Align Center"
-          >
-            <AlignCenter className="h-4 w-4" />
-          </ToolbarButton>
-          <ToolbarButton
-            onClick={handleAlignRight}
-            isActive={isCommandActive("justifyRight")}
-            title="Align Right"
-          >
-            <AlignRight className="h-4 w-4" />
-          </ToolbarButton>
-        </div>
-
-        <div className="w-px h-6 bg-emerald-500/30" />
-
-        <div className="flex items-center gap-1">
-          <ToolbarButton
-            onClick={handleBulletList}
-            isActive={isCommandActive("insertUnorderedList")}
-            title="Bullet List"
-          >
-            <List className="h-4 w-4" />
-          </ToolbarButton>
-          <ToolbarButton
-            onClick={handleNumberedList}
-            isActive={isCommandActive("insertOrderedList")}
-            title="Numbered List"
-          >
-            <ListOrdered className="h-4 w-4" />
-          </ToolbarButton>
-        </div>
-
-        <div className="w-px h-6 bg-emerald-500/30" />
-
-        <ToolbarButton onClick={handleInsertLink} title="Insert Link (Ctrl+K)">
-          <Link className="h-4 w-4" />
-        </ToolbarButton>
-      </div>
-
-      <div className="relative flex-1">
+      <input
+        type="file"
+        accept="image/*"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={handleImageChange}
+      />
+      {uploading && (
         <div
-          ref={editorRef}
-          contentEditable
-          className="min-h-[600px] h-full p-8 focus:outline-none prose prose-lg max-w-none text-white prose-headings:text-emerald-300 prose-p:text-gray-200 prose-strong:text-white prose-em:text-gray-300"
-          onInput={handleEditorInput}
           style={{
-            lineHeight: "1.8",
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(255,255,255,0.7)",
+            zIndex: 10,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: 600,
+            color: "#4f8cff",
+            fontSize: 18,
           }}
-          suppressContentEditableWarning={true}
-        />
-
-        {isEditorEmpty && (
-          <div className="absolute top-8 left-8 text-gray-400 pointer-events-none select-none text-lg">
-            Start writing your content here...
-          </div>
-        )}
-      </div>
-
-      <div className="px-8 py-3 border-t border-emerald-500/20 bg-black/20 rounded-b-xl">
-        <div className="flex justify-between items-center text-sm text-gray-400">
-          <span>Rich Text Editor</span>
-          <span>Click and start typing</span>
+        >
+          Uploading image...
         </div>
-      </div>
+      )}
+      <div
+        ref={editorRef}
+        style={{
+          minHeight: "240px",
+          padding: "16px 12px 32px 12px",
+          fontSize: "1.08rem",
+          lineHeight: "1.7",
+          fontFamily: "'Inter', 'Segoe UI', Arial, sans-serif",
+          background: "transparent",
+          outline: "none",
+          transition: "box-shadow 0.2s cubic-bezier(.4,2,.6,1)",
+        }}
+        tabIndex={0}
+        aria-label="Rich text editor"
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+      />
     </div>
   );
 };
 
-export default RichTextEditor;
+export default RichEditor;

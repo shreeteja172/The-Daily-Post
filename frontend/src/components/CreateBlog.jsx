@@ -5,7 +5,6 @@ import { toast } from "react-hot-toast";
 import { Context } from "../lib/contextapi";
 import EnhancedUploadDropzone from "./EnhancedUploadDropzone";
 import RichEditor from "./RichEditor";
-// import Editor from "./Editor";
 const CreateBlog = ({ onClose, refetchPosts }) => {
   const { token } = useContext(Context);
   const [data, setData] = useState({
@@ -17,6 +16,7 @@ const CreateBlog = ({ onClose, refetchPosts }) => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+  const [visibility, setVisibility] = useState("public");
 
   const handleCreatePost = async (e) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ const CreateBlog = ({ onClose, refetchPosts }) => {
         title: data.title,
         content: data.content,
         date: new Date(data.date).toISOString(),
-        visibility: "public",
+        visibility,
         imageUrl: uploadedImageUrl || data.imageUrl,
       };
 
@@ -75,7 +75,6 @@ const CreateBlog = ({ onClose, refetchPosts }) => {
         onSubmit={handleCreatePost}
         className="grid grid-cols-1 xl:grid-cols-2 gap-6 min-h-[85vh]"
       >
-        {/* Left Side - Form Fields */}
         <div className="flex flex-col space-y-4 bg-black/20 p-6 rounded-2xl border border-emerald-500/20 backdrop-blur-sm">
           <div className="mb-2">
             <h2 className="text-2xl font-bold text-emerald-400 mb-2 flex items-center gap-2">
@@ -244,7 +243,6 @@ const CreateBlog = ({ onClose, refetchPosts }) => {
           </div>
         </div>
 
-        {/* Right Side - Content Editor */}
         <div className="flex flex-col bg-black/20 p-6 rounded-2xl border border-emerald-500/20 backdrop-blur-sm">
           <div className="mb-4">
             <h2 className="text-2xl font-bold text-emerald-400 mb-2 flex items-center gap-2">
