@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import BlogCard from "../components/BlogCard";
-
+import { useMemo } from "react";
 const fetchAllBlogs = async ({ pageParam }) => {
   const response = await axios.get(
     `${import.meta.env.VITE_BACKEND_URL}/api/blogs/myBlogs?_limit=8&_page=${
@@ -42,6 +42,17 @@ const InfiniteOwnBlogs = () => {
     },
     staleTime: 1000,
   });
+
+  const uniqueBlogs = useMemo(() => {
+      const seen = new Set();
+      return data?.pages.flat().filter((blog) => {
+        if (!blog || !blog._id) return false;
+        if (seen.has(blog._id)) return false;
+        seen.add(blog._id);
+        return true;
+      });
+    }, [data]);
+    // console.log("Unique blogs:", uniqueBlogs);
 
   const handleReadMore = (blog) => {
     navigate(`/blog/${blog._id}`);
@@ -103,21 +114,19 @@ const InfiniteOwnBlogs = () => {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-white">My Blog Posts</h2>
               <span className="text-emerald-100/60 text-sm">
-                {data?.pages?.[0]?.length
-                  ? `Showing ${data.pages.flat().length} of your blogs`
+                {uniqueBlogs?.[0]?.length
+                  ? `Showing ${uniqueBlogs.flat().length} of your blogs`
                   : ""}
               </span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {data?.pages.map((page) =>
-                page.map((blog) => (
+              {uniqueBlogs?.map((blog) =>
                   <BlogCard
                     key={blog._id}
                     blog={blog}
                     onReadMore={handleReadMore}
                   />
-                ))
               )}
             </div>
 
@@ -135,7 +144,7 @@ const InfiniteOwnBlogs = () => {
               </div>
             )}
 
-            {!hasNextPage && data?.pages?.flat().length > 0 && (
+            {!hasNextPage && uniqueBlogs?.flat().length > 0 && (
               <div className="text-center mt-8">
                 <p className="text-emerald-100/60">
                   You've reached the end of your blog posts!
@@ -143,7 +152,7 @@ const InfiniteOwnBlogs = () => {
               </div>
             )}
 
-            {(!data?.pages || data.pages.flat().length === 0) && (
+            {(!uniqueBlogs || uniqueBlogs.flat().length === 0) && (
               <div className="text-center py-12">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-black/30 rounded-full mb-4">
                   <svg

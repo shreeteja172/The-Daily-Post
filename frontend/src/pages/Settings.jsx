@@ -61,7 +61,6 @@ const Settings = () => {
     updateProfileMutation.mutate(updateData);
   };
 
-
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">

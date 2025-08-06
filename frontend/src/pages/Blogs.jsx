@@ -225,10 +225,10 @@ const Blogs = () => {
                 </div>
               </div>
             </div>
-
-            <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
+            {/* //feature daal blog ka latest */}
+            {/* <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-white">Featured Post</h2>
+                <h2 className="text-2xl font-bold text-white">Latest Blog</h2>
                 <span className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs px-3 py-1 rounded-full">
                   Featured
                 </span>
@@ -237,7 +237,7 @@ const Blogs = () => {
               <div className="space-y-4">
                 <div className="flex gap-4">
                   <div className="w-24 h-20 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center">
-                    <span className="text-emerald-100/60 text-sm">Img</span>
+                    <span className="text-emerald-100/60 text-sm" >Img</span>
                   </div>
                   <div className="flex-1">
                     <p className="text-emerald-100/70 text-lg leading-relaxed">
@@ -256,6 +256,68 @@ const Blogs = () => {
                 <button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30">
                   Read More
                 </button>
+              </div>
+            </div> */}
+            <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-white">Latest Blog</h2>
+                <span className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs px-3 py-1 rounded-full">
+                  Featured
+                </span>
+              </div>
+
+              <div className="space-y-4">
+                {userPosts && userPosts.length > 0 ? (
+                  <>
+                    <div className="flex gap-4">
+                      <div className="w-24 h-20 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center overflow-hidden">
+                        {userPosts[0].imageUrl ? (
+                          <img
+                            src={userPosts[0].imageUrl}
+                            alt={userPosts[0].title || "Blog Image"}
+                            className="w-full h-full object-cover rounded-lg"
+                          />
+                        ) : (
+                          <span className="text-emerald-100/60 text-sm">
+                            Img
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-emerald-100/70 text-lg leading-relaxed">
+                          {userPosts[0].description || userPosts[0].content
+                            ? `${(
+                                userPosts[0].description || userPosts[0].content
+                              ).substring(0, 120)}...`
+                            : "No description available..."}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-4 text-emerald-100/50 text-sm">
+                      <span>
+                        By {userPosts[0].author?.username || "Unknown Author"}
+                      </span>
+                      <span>•</span>
+                      <span>
+                        {userPosts[0].date
+                          ? new Date(userPosts[0].date).toLocaleDateString()
+                          : "Unknown date"}
+                      </span>
+                    </div>
+
+                    <button
+                      className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30"
+                      onClick={() => navigate(`/blogs/${userPosts[0]._id}`)}
+                    >
+                      Read More
+                    </button>
+                  </>
+                ) : (
+                  <div className="text-emerald-100/60">
+                    No featured blog available.
+                  </div>
+                )}
               </div>
             </div>
           </div>
