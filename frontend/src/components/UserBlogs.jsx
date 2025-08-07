@@ -23,21 +23,17 @@ const UserBlogs = () => {
       return response.data;
     },
   });
-   if (!token) {
-    return (
-      <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-md rounded">
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          Please log in to view your blogs
-        </h2>
-      </div>
-    );
-  }
 
   return (
     <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-md rounded">
       <h2 className="text-2xl font-bold mb-6 text-center">Your Blogs</h2>
       {isLoading ? (
-        <p>Loading...</p>
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mb-4"></div>
+          <p className="text-emerald-100/70">Loading your blogs...</p>
+        </div>
+      ) : blogs.length === 0 ? (
+        <p className="text-center text-gray-500">No blogs found.</p>
       ) : (
         <ul className="space-y-4">
           {blogs.map((blog) => (

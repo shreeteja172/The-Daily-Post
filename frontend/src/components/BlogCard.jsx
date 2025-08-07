@@ -5,7 +5,6 @@ const BlogCard = ({ blog, onReadMore }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
-      {/* Image Section */}
       {imageUrl && (
         <div className="w-full overflow-hidden">
           <img
@@ -19,17 +18,22 @@ const BlogCard = ({ blog, onReadMore }) => {
         </div>
       )}
 
-      {/* Content Section */}
       <div className="p-6">
         <h3 className="text-xl font-semibold text-gray-800 mb-2 line-clamp-2">
           {title}
         </h3>
+        <div className="text-gray-600 text-sm mb-4 line-clamp-3">
+          {content ? (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: content.slice(0, 220) + "...",
+              }}
+            />
+          ) : (
+            <p>No description available...</p>
+          )}
+        </div>
 
-        <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-          {content.substring(0, 150)}...
-        </p>
-
-        {/* Author and Date */}
         <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
           <span className="flex items-center">
             <svg
@@ -61,7 +65,6 @@ const BlogCard = ({ blog, onReadMore }) => {
           </span>
         </div>
 
-        {/* Read More Button */}
         <button
           onClick={() => onReadMore && onReadMore(blog)}
           className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-2 px-4 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"

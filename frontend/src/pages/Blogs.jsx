@@ -470,17 +470,18 @@ const Blogs = () => {
                           className="w-full h-full object-cover rounded-lg"
                         />
                       </div>
+                      {/* {console.log(post)} */}7
                       <h3 className="text-white font-semibold mb-2 group-hover:text-emerald-400 transition-colors duration-300">
                         {post.title || "Untitled Post"}
                       </h3>
-                      <p className="text-emerald-100/60 text-sm mb-2">
-                        {post.description || post.content
-                          ? `${(post.description || post.content).substring(
-                              0,
-                              60
-                            )}...`
-                          : "No description available..."}
-                      </p>
+                      <div
+                          className="text-emerald-100/70 text-1xl leading-relaxed"
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              post.content.slice(0, 220) + "....." ||
+                              "<p>No description available...</p>",
+                          }}
+                        />
                       <div className="text-emerald-100/40 text-xs">
                         By {post.author?.username || "Unknown Author"} on{" "}
                         {post.date

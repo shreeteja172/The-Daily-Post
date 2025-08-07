@@ -4,9 +4,12 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import { Context } from "../lib/contextapi";
+import { useContext } from "react";
 
 const Signin = () => {
   const navigate = useNavigate();
+  const { setToken } = useContext(Context);
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -22,14 +25,13 @@ const Signin = () => {
     },
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
+      setToken(data.token);
       toast.success("Welcome Again!");
       setData({
         username: "",
         password: "",
       });
-      setTimeout(() => {
-        navigate("/blogs");
-      }, 1000);
+      navigate("/blogs");
     },
     onError: (error) => {
       console.error("Error during sign-in:", error);
@@ -61,7 +63,6 @@ const Signin = () => {
 
       <div className="relative z-10 w-full max-w-md mx-auto px-6">
         <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
-
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/50 mx-auto mb-4">
               <span className="text-white font-bold text-xl">TDP</span>
@@ -109,7 +110,7 @@ const Signin = () => {
               {signinMutation.isPending ? (
                 <div className="flex items-center justify-center">
                   <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    className="animate-spin -ml-1 mr-3 h-5 w-5"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -119,16 +120,16 @@ const Signin = () => {
                       cx="12"
                       cy="12"
                       r="10"
-                      stroke="currentColor"
+                      stroke="#10B981"
                       strokeWidth="4"
                     ></circle>
                     <path
-                      className="opacity-75"
-                      fill="currentColor"
+                      className="opacity-90"
+                      fill="#10B981"
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Signing In...
+                  <span className="text-emerald-400">Signing In...</span>
                 </div>
               ) : (
                 "Sign In"

@@ -134,15 +134,14 @@ const InfiniteBlogsAll = () => {
                       key={blog._id}
                       onClick={() => navigate(`/blogs/${blog._id}`)}
                       className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
-                    >
+                      >
+                      {/* {console.log("Rendering blog:", blog)} */}
                 <BlogCard
                   blog={blog}
                   onReadMore={handleReadMore}
                 />
                 </div>
                 </div>
-
-                
               ))}
             </div>
 
