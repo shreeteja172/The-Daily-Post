@@ -12,6 +12,7 @@ import RequireAuth from "./components/RequireAuth";
 import BlogDetails from "./pages/BlogDetails";
 import Settings from "./pages/Settings";
 import About from "./pages/About";
+import NotFound from "./pages/NotFound";
 function App() {
   return (
     <div>
@@ -30,6 +31,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

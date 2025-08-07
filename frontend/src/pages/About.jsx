@@ -41,7 +41,7 @@ const About = () => {
                 </div>
                 <div className="md:w-2/3 md:pl-8 text-center md:text-left">
                   <h2 className="text-3xl font-bold text-white mb-3">
-                    Shreeteja
+                    Shreeteja M
                   </h2>
                   <p className="text-emerald-100/80 mb-6 leading-relaxed">
                     I'm a developer passionate about building real-world apps.

@@ -55,7 +55,7 @@ const InfiniteOwnBlogs = () => {
     // console.log("Unique blogs:", uniqueBlogs);
 
   const handleReadMore = (blog) => {
-    navigate(`/blog/${blog._id}`);
+    navigate(`/blogs/${blog._id}`);
   };
 
   if (isLoading) {

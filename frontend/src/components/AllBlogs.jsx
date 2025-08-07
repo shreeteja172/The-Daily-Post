@@ -33,25 +33,23 @@ const AllBlogs = () => {
   return (
     <div>
       <Navigation />
-      <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-md rounded">
-        <h2 className="text-2xl font-bold mb-6 text-center">All Blogs</h2>
-        <ul className="space-y-4">
-          {data.map((blog) => (
-            <li
-              key={blog._id}
-              className="border p-4 rounded shadow-sm bg-white"
-            >
-              <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                {blog.title}
-              </h3>
-              <p className="text-gray-600 mb-2">{blog.description}</p>
-              <p className="text-gray-500 text-sm">
-                By {blog.author.username} on{" "}
-                {new Date(blog.date).toLocaleDateString()}
-              </p>
-            </li>
-          ))}
-        </ul>
+      <div className="min-h-screen bg-black relative overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-black to-teal-600/10"></div>
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,.01)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+        </div>
+        <div className="absolute inset-0 bg-black/20"></div>
+
+        <div className="relative z-10 pt-24 px-4 pb-8 sm:px-6 lg:px-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-8 text-center">
+            All Blogs
+          </h1>
+          <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data.map((blog) => (
+              <BlogCard key={blog._id} blog={blog} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

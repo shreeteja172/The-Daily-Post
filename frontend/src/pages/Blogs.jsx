@@ -63,7 +63,6 @@ const Blogs = () => {
   const handleCreatePost = () => {
     navigate("/create-blog");
   };
-
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
@@ -225,39 +224,7 @@ const Blogs = () => {
                 </div>
               </div>
             </div>
-            {/* //feature daal blog ka latest */}
-            {/* <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-white">Latest Blog</h2>
-                <span className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs px-3 py-1 rounded-full">
-                  Featured
-                </span>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex gap-4">
-                  <div className="w-24 h-20 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center">
-                    <span className="text-emerald-100/60 text-sm" >Img</span>
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-emerald-100/70 text-lg leading-relaxed">
-                      Short description of the featured post with engaging
-                      content that draws readers in.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-4 text-emerald-100/50 text-sm">
-                  <span>By Featured Author</span>
-                  <span>•</span>
-                  <span>Jan 15, 2024</span>
-                </div>
-
-                <button className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30">
-                  Read More
-                </button>
-              </div>
-            </div> */}
+            {/* {console.log(userPosts)} */}
             <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-white">Latest Blog</h2>
@@ -270,7 +237,7 @@ const Blogs = () => {
                 {userPosts && userPosts.length > 0 ? (
                   <>
                     <div className="flex gap-4">
-                      <div className="w-24 h-20 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center overflow-hidden">
+                      <div className="w-80 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center overflow-hidden">
                         {userPosts[0].imageUrl ? (
                           <img
                             src={userPosts[0].imageUrl}
@@ -283,14 +250,16 @@ const Blogs = () => {
                           </span>
                         )}
                       </div>
+                      {/* {console.log(userPosts)} */}
                       <div className="flex-1">
-                        <p className="text-emerald-100/70 text-lg leading-relaxed">
-                          {userPosts[0].description || userPosts[0].content
-                            ? `${(
-                                userPosts[0].description || userPosts[0].content
-                              ).substring(0, 120)}...`
-                            : "No description available..."}
-                        </p>
+                        <div
+                          className="text-emerald-100/70 text-lg leading-relaxed"
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              userPosts[0].content.slice(0, 220) + "....." ||
+                              "<p>No Content Available...</p>",
+                          }}
+                        />
                       </div>
                     </div>
 
@@ -300,6 +269,8 @@ const Blogs = () => {
                       </span>
                       <span>•</span>
                       <span>
+                        {" "}
+                        Wrote on {"     "}
                         {userPosts[0].date
                           ? new Date(userPosts[0].date).toLocaleDateString()
                           : "Unknown date"}
@@ -314,8 +285,8 @@ const Blogs = () => {
                     </button>
                   </>
                 ) : (
-                  <div className="text-emerald-100/60">
-                    No featured blog available.
+                  <div className="text-emerald-100/60 text-center py-8">
+                    No featured blog available.(Write 1 blog to see it here)
                   </div>
                 )}
               </div>
@@ -329,7 +300,10 @@ const Blogs = () => {
                 <span className="text-emerald-100/60 text-sm">
                   {userPosts.length} posts
                 </span>
-                <button className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300 font-medium">
+                <button
+                  className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300 font-medium cursor-pointer"
+                  onClick={() => navigate("/my-blogs")}
+                >
                   Manage All
                 </button>
               </div>
@@ -403,14 +377,17 @@ const Blogs = () => {
                         </div>
                       </div>
 
-                      <p className="text-emerald-100/60 text-sm mb-2">
-                        {post.description || post.content
-                          ? `${(post.description || post.content).substring(
-                              0,
-                              120
-                            )}...`
-                          : "No description available..."}
-                      </p>
+                      <div className="flex-1">
+                        <div
+                          className="text-emerald-100/70 text-1xl leading-relaxed"
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              userPosts[0].content.slice(0, 220) + "....." ||
+                              "<p>No description available...</p>",
+                          }}
+                        />
+                      </div>
+
                       <div className="flex justify-between items-center">
                         <div className="text-emerald-100/40 text-sm">
                           Posted on{" "}
@@ -456,7 +433,10 @@ const Blogs = () => {
           <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-8 shadow-2xl shadow-emerald-500/10">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-white">All Blog Posts</h2>
-              <button className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300 font-medium">
+              <button
+                className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300 font-medium cursor-pointer"
+                onClick={() => navigate("/all-blogs")}
+              >
                 View All
               </button>
             </div>
@@ -480,6 +460,7 @@ const Blogs = () => {
                   posts.map((post, index) => (
                     <div
                       key={post._id || index}
+                      onClick={() => navigate(`/blogs/${post._id}`)}
                       className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
                     >
                       <div className="w-full h-32 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">

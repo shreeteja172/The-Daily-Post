@@ -45,7 +45,7 @@ const InfiniteBlogsAll = () => {
       const nextPage = allpages.length + 1;
       return nextPage;
     },
-    staleTime: 1000, // Adjust stale time as needed
+    staleTime: 5000,
   });
 
   const handleReadMore = (blog) => {
@@ -129,11 +129,20 @@ const InfiniteBlogsAll = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {uniqueBlogs.map((blog) => (
+                <div className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group">
+                  <div
+                      key={blog._id}
+                      onClick={() => navigate(`/blogs/${blog._id}`)}
+                      className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
+                    >
                 <BlogCard
-                  key={blog._id}
                   blog={blog}
                   onReadMore={handleReadMore}
                 />
+                </div>
+                </div>
+
+                
               ))}
             </div>
 

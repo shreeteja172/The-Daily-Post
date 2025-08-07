@@ -7,16 +7,17 @@ import EnhancedUploadDropzone from "./EnhancedUploadDropzone";
 import RichEditor from "./RichEditor";
 const CreateBlog = ({ onClose, refetchPosts }) => {
   const { token } = useContext(Context);
+  const [visibility] = useState("public");
   const [data, setData] = useState({
     title: "",
     description: "",
     content: "",
     imageUrl: "",
     date: new Date().toISOString().split("T")[0],
+    visibility: "public",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
-  const [visibility, setVisibility] = useState("public");
 
   const handleCreatePost = async (e) => {
     e.preventDefault();

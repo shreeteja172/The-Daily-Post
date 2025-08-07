@@ -33,8 +33,9 @@ const EnhancedUploadDropzone = ({
         'input[type="file"][data-ut-element="upload-input"]'
       ) || document.querySelector('input[type="file"]');
     if (fileInput) {
-      fileInput.click();
-    }
+    fileInput.value = "";
+    fileInput.click();
+  }
   }, []);
 
   if (uploadedImageUrl) {
