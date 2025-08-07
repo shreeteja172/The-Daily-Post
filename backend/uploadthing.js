@@ -10,7 +10,16 @@ export const uploadRouter = {
       allowedFileTypes: ["image/jpeg", "image/png", "image/gif"],
     },
   }).onUploadComplete(async (file) => {
-    // console.log("✅ File uploaded:", file);
     return { fileUrl: file.url };
+  }),
+
+  profilePicture: f({
+    image: {
+      maxFileSize: "2MB",
+      maxFileCount: 1,
+      allowedFileTypes: ["image/jpeg", "image/png"],
+    },
+  }).onUploadComplete(async (file) => {
+    return { profileUrl: file.url };
   }),
 };

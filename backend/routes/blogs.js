@@ -28,12 +28,13 @@ router.post(
           error: "Invalid input",
         });
       }
-      const { title, content, date, visibility, imageUrl } = parsed.data;
+      const { title,description, content, date, visibility, imageUrl } = parsed.data;
       //   console.log("Parsed data:", parsed.data);
       const authorId = req.userid;
 
       const newBlog = new Blog({
         title,
+        description,
         content,
         date: date || new Date().toISOString(),
         visibility: visibility || "public",
@@ -191,7 +192,7 @@ router.put(
           error: "Invalid input",
         });
       }
-      const { title, content, date, visibility, imageUrl } = parsed.data;
+      const { title,description, content, date, visibility, imageUrl } = parsed.data;
       // console.log("Parsed data for update:", parsed.data);
       const updateData = { title, content };
       if (date) {
@@ -202,6 +203,9 @@ router.put(
       }
       if (visibility) {
         updateData.visibility = visibility;
+      }
+      if (description) {
+        updateData.description = description;
       }
       const updatedBlog = await Blog.findByIdAndUpdate(blogId, updateData, {
         new: true,
