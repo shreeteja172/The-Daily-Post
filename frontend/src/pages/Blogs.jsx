@@ -301,10 +301,10 @@ const Blogs = () => {
                   {userPosts.length} posts
                 </span>
                 <button
-                  className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300 font-medium cursor-pointer"
+                  className="text-emerald-400 cursor-pointer hover:text-emerald-300 transition-colors duration-300 font-medium "
                   onClick={() => navigate("/my-blogs")}
                 >
-                  Manage All
+                  View All
                 </button>
               </div>
             </div>
@@ -323,6 +323,110 @@ const Blogs = () => {
                 ))}
               </div>
             ) : (
+              // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              //   {userPosts?.length > 0 ? (
+              //     userPosts.map((post, index) => (
+              //       <div
+              //         key={post._id || index}
+              //         onClick={() => navigate(`/blogs/${post._id}`)}
+              //         className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
+              //       >
+              //         <div className="w-full h-32 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
+              //           <img
+              //             src={post.imageUrl || ""}
+              //             alt={post.title || "Blog Post Image"}
+              //             className="w-full h-full object-cover rounded-lg"
+              //           />
+              //         </div>
+
+              //         <div className="flex justify-between items-start mb-4">
+              //           <h3 className="text-white font-semibold text-lg group-hover:text-emerald-400 transition-colors duration-300">
+              //             {post.title || "Untitled Post"}
+              //           </h3>
+              //           <div className="flex space-x-2">
+              //             <button className="text-emerald-400 hover:text-emerald-300 transition-colors p-1">
+              //               <svg
+              //                 className="w-5 h-5"
+              //                 fill="none"
+              //                 stroke="currentColor"
+              //                 viewBox="0 0 24 24"
+              //               >
+              //                 <path
+              //                   strokeLinecap="round"
+              //                   strokeLinejoin="round"
+              //                   strokeWidth={1.5}
+              //                   d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              //                 />
+              //               </svg>
+              //             </button>
+              //             <button className="text-red-400 hover:text-red-300 transition-colors p-1">
+              //               <svg
+              //                 className="w-5 h-5"
+              //                 fill="none"
+              //                 stroke="currentColor"
+              //                 viewBox="0 0 24 24"
+              //               >
+              //                 <path
+              //                   strokeLinecap="round"
+              //                   strokeLinejoin="round"
+              //                   strokeWidth={1.5}
+              //                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              //                 />
+              //               </svg>
+              //             </button>
+              //           </div>
+              //         </div>
+
+              //         <div className="flex-1">
+              //           <div
+              //             className="text-emerald-100/70 text-1xl leading-relaxed"
+              //             dangerouslySetInnerHTML={{
+              //               __html:
+              //                 userPosts[0].content.slice(0, 220) + "....." ||
+              //                 "<p>No description available...</p>",
+              //             }}
+              //           />
+              //         </div>
+
+              //         <div className="flex justify-between items-center">
+              //           <div className="text-emerald-100/40 text-sm">
+              //             Posted on{" "}
+              //             {post.date
+              //               ? new Date(post.date).toLocaleDateString()
+              //               : "Unknown date"}
+              //           </div>
+              //         </div>
+              //       </div>
+              //     ))
+              //   ) : (
+              //     <div className="col-span-full text-center py-8">
+              //       <div className="inline-flex items-center justify-center w-16 h-16 bg-black/30 rounded-full mb-4">
+              //         <svg
+              //           className="w-8 h-8 text-emerald-400/70"
+              //           fill="none"
+              //           stroke="currentColor"
+              //           viewBox="0 0 24 24"
+              //         >
+              //           <path
+              //             strokeLinecap="round"
+              //             strokeLinejoin="round"
+              //             strokeWidth={1.5}
+              //             d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+              //           />
+              //         </svg>
+              //       </div>
+              //       <p className="text-emerald-100/60 mb-3">
+              //         You haven't published any posts yet
+              //       </p>
+              //       <button
+              //         onClick={handleCreatePost}
+              //         className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-2 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30"
+              //       >
+              //         Create Your First Post
+              //       </button>
+              //     </div>
+              //   )}
+              // </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {userPosts?.length > 0 ? (
                   userPosts.map((post, index) => (
@@ -331,11 +435,12 @@ const Blogs = () => {
                       onClick={() => navigate(`/blogs/${post._id}`)}
                       className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
                     >
-                      <div className="w-full h-32 bg-black/30 rounded-lg border border-emerald-500/10 flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
+                      <div className="w-full aspect-[16/9] bg-black/20 rounded-lg border border-emerald-500/10 overflow-hidden mb-4 group-hover:shadow-lg group-hover:shadow-emerald-500/20 transition-all duration-300">
                         <img
                           src={post.imageUrl || ""}
                           alt={post.title || "Blog Post Image"}
-                          className="w-full h-full object-cover rounded-lg"
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>
 
@@ -388,7 +493,7 @@ const Blogs = () => {
                         />
                       </div>
 
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center mt-4">
                         <div className="text-emerald-100/40 text-sm">
                           Posted on{" "}
                           {post.date
@@ -475,13 +580,13 @@ const Blogs = () => {
                         {post.title || "Untitled Post"}
                       </h3>
                       <div
-                          className="text-emerald-100/70 text-1xl leading-relaxed"
-                          dangerouslySetInnerHTML={{
-                            __html:
-                              post.content.slice(0, 220) + "....." ||
-                              "<p>No description available...</p>",
-                          }}
-                        />
+                        className="text-emerald-100/70 text-1xl leading-relaxed"
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            post.content.slice(0, 220) + "....." ||
+                            "<p>No description available...</p>",
+                        }}
+                      />
                       <div className="text-emerald-100/40 text-xs">
                         By {post.author?.username || "Unknown Author"} on{" "}
                         {post.date

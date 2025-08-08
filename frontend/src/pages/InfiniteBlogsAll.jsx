@@ -26,6 +26,22 @@ const fetchAllBlogs = async ({ pageParam }) => {
   return response.data;
 };
 
+const SkeletonLoader = () => (
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6 py-8">
+    {[...Array(6)].map((_, i) => (
+      <div
+        key={i}
+        className="bg-black/30 rounded-xl border border-emerald-500/10 p-4 animate-pulse"
+      >
+        <div className="w-full h-48 bg-gray-800/20 rounded-lg mb-4" />
+        <div className="h-6 bg-gray-800/20 rounded-lg w-3/4 mb-2" />
+        <div className="h-4 bg-gray-800/20 rounded-lg w-full mb-2" />
+        <div className="h-4 bg-gray-800/20 rounded-lg w-2/3" />
+      </div>
+    ))}
+  </div>
+);
+
 const InfiniteBlogsAll = () => {
   const navigate = useNavigate();
 
@@ -49,7 +65,7 @@ const InfiniteBlogsAll = () => {
   });
 
   const handleReadMore = (blog) => {
-    navigate(`/blog/${blog._id}`);
+    navigate(`/blogs/${blog._id}`);
   };
   console.log("All pages:", data?.pages);
 
@@ -76,9 +92,7 @@ const InfiniteBlogsAll = () => {
         <Navigation />
         <main className="relative z-10 md:ml-24 pt-20 md:pt-8">
           <div className="max-w-7xl mx-auto px-6 py-8">
-            <div className="text-center text-white text-xl">
-              Loading all blogs...
-            </div>
+            <SkeletonLoader />
           </div>
         </main>
       </div>
@@ -131,16 +145,13 @@ const InfiniteBlogsAll = () => {
               {uniqueBlogs.map((blog) => (
                 <div className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group">
                   <div
-                      key={blog._id}
-                      onClick={() => navigate(`/blogs/${blog._id}`)}
-                      className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
-                      >
-                      {/* {console.log("Rendering blog:", blog)} */}
-                <BlogCard
-                  blog={blog}
-                  onReadMore={handleReadMore}
-                />
-                </div>
+                    key={blog._id}
+                    onClick={() => navigate(`/blogs/${blog._id}`)}
+                    className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
+                  >
+                    {/* {console.log("Rendering blog:", blog)} */}
+                    <BlogCard blog={blog} onReadMore={handleReadMore} />
+                  </div>
                 </div>
               ))}
             </div>
