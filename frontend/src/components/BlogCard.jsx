@@ -4,36 +4,38 @@ const BlogCard = ({ blog, onReadMore }) => {
   const { _id, title, content, imageUrl, author, createdAt, date } = blog;
 
   return (
-    <div className="relative bg-black/50 backdrop-blur-lg border border-emerald-500/20 rounded-xl shadow-xl shadow-emerald-500/10 overflow-hidden transition-all duration-300 hover:shadow-emerald-500/30 hover:border-emerald-500/30 group">
+    <div className="relative bg-black/60 backdrop-blur-lg border border-emerald-500/20 rounded-2xl shadow-lg overflow-hidden transition-all duration-200 group hover:scale-101 hover:shadow-emerald-500/20">
       {imageUrl && (
         <div className="relative w-full aspect-[16/9] overflow-hidden">
           <img
             src={imageUrl}
             alt={title || "Blog image"}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover rounded-t-xl shadow transition-transform duration-200 group-hover:scale-102"
             loading="lazy"
             decoding="async"
             onError={(e) => {
-              e.target.src = "https://via.placeholder.com/400x225?text=Image+Not+Found";
+              e.target.src =
+                "https://via.placeholder.com/400x225?text=Image+Not+Found";
               e.target.classList.add("opacity-50");
             }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
         </div>
       )}
 
       <div className="p-6 relative z-10">
         <h3
-          className="text-xl sm:text-2xl font-bold text-white mb-3 line-clamp-2"
+          className="text-2xl font-bold mb-3 line-clamp-2 text-white"
           title={title}
         >
           {title || "Untitled Blog"}
         </h3>
-        <div className="text-emerald-100/80 text-sm sm:text-base mb-4 line-clamp-3 leading-relaxed">
+        <div className="text-emerald-100/80 text-base mb-4 line-clamp-3 leading-relaxed">
           {content ? (
             <div
               dangerouslySetInnerHTML={{
-                __html: content.slice(0, 150) + (content.length > 150 ? "..." : ""),
+                __html:
+                  content.slice(0, 150) + (content.length > 150 ? "..." : ""),
               }}
             />
           ) : (
@@ -82,7 +84,7 @@ const BlogCard = ({ blog, onReadMore }) => {
 
         <button
           onClick={() => onReadMore && onReadMore(blog)}
-          className="relative w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-2.5 px-5 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 focus:ring-offset-2 focus:ring-offset-black/70"
+          className="relative w-full bg-emerald-600 hover:bg-teal-600 text-white py-2.5 px-5 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400/40 focus:ring-offset-2 focus:ring-offset-black/70"
           aria-label={`Read full article: ${title || "Untitled Blog"}`}
         >
           Read Full Article

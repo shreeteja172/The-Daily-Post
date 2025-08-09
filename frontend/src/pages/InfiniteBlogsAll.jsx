@@ -143,16 +143,11 @@ const InfiniteBlogsAll = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {uniqueBlogs.map((blog) => (
-                <div className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group">
-                  <div
-                    key={blog._id}
-                    onClick={() => navigate(`/blogs/${blog._id}`)}
-                    className="bg-black/30 backdrop-blur-sm rounded-xl border border-emerald-500/10 p-4 hover:border-emerald-500/30 hover:bg-black/40 transition-all duration-300 cursor-pointer group"
-                  >
-                    {/* {console.log("Rendering blog:", blog)} */}
-                    <BlogCard blog={blog} onReadMore={handleReadMore} />
-                  </div>
-                </div>
+                <BlogCard
+                  key={blog._id}
+                  blog={blog}
+                  onReadMore={handleReadMore}
+                />
               ))}
             </div>
 
