@@ -124,6 +124,7 @@ const InfiniteOwnBlogs = () => {
               {uniqueBlogs?.map((blog) =>
                   <BlogCard
                     key={blog._id}
+                    // onClick={() => navigate(`/blogs/${blog._id}`)}
                     blog={blog}
                     onReadMore={handleReadMore}
                   />

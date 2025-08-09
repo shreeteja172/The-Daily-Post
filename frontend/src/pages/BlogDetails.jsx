@@ -17,9 +17,7 @@ const fetchBlogDetails = async (_id) => {
     if (!response.data) throw new Error("Blog not found");
     return response.data;
   } catch (error) {
-    throw new Error(
-      error.response?.data?.message || "Failed to fetch blog"
-    );
+    throw new Error(error.response?.data?.message || "Failed to fetch blog");
   }
 };
 
@@ -33,7 +31,10 @@ const SkeletonLoader = () => (
       </div>
       <div className="space-y-3">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-4 bg-gray-800/20 rounded-lg animate-pulse" />
+          <div
+            key={i}
+            className="h-4 bg-gray-800/20 rounded-lg animate-pulse"
+          />
         ))}
       </div>
     </div>
@@ -74,13 +75,14 @@ const BlogDetails = () => {
     queryKey: ["blogDetails", _id],
     queryFn: () => fetchBlogDetails(_id),
     retry: 1,
-    staleTime: 5 * 60 * 1000, 
+    staleTime: 5 * 60 * 1000,
     enabled: !!_id,
   });
 
   useEffect(() => {
     const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const totalHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
       const scrollPosition = window.scrollY;
       const progressPercent = (scrollPosition / totalHeight) * 100;
       setProgress(Math.min(progressPercent, 100));
@@ -91,12 +93,15 @@ const BlogDetails = () => {
 
   const handleShare = () => {
     if (navigator.share) {
-      navigator.share({
-        title: data?.title || "Blog Post",
-        url: window.location.href,
-      }).catch(() => alert("Failed to share blog post"));
+      navigator
+        .share({
+          title: data?.title || "Blog Post",
+          url: window.location.href,
+        })
+        .catch(() => alert("Failed to share blog post"));
     } else {
-      navigator.clipboard.writeText(window.location.href)
+      navigator.clipboard
+        .writeText(window.location.href)
         .then(() => alert("Link copied to clipboard!"))
         .catch(() => alert("Failed to copy link"));
     }
@@ -104,7 +109,8 @@ const BlogDetails = () => {
 
   if (isLoading) return <SkeletonLoader />;
 
-  if (isError) return <ErrorDisplay message={error.message} onRetry={refetch} />;
+  if (isError)
+    return <ErrorDisplay message={error.message} onRetry={refetch} />;
 
   if (!data) {
     return (
@@ -131,7 +137,10 @@ const BlogDetails = () => {
       <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-black to-teal-600/10" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,.015)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,.015)_1px,transparent_1px)] bg-[size:50px_50px]" />
 
-      <div className="fixed top-0 left-0 h-1 bg-emerald-500/50 z-50 transition-all duration-300" style={{ width: `${progress}%` }} />
+      <div
+        className="fixed top-0 left-0 h-1 bg-emerald-500/50 z-50 transition-all duration-300"
+        style={{ width: `${progress}%` }}
+      />
 
       <div className="relative z-10 pb-16">
         <header className="fixed top-4 left-4 right-4 z-50 flex justify-between items-center max-w-7xl mx-auto px-4">
@@ -176,7 +185,10 @@ const BlogDetails = () => {
             </h1>
             <div className="flex flex-wrap items-center justify-center gap-3 text-emerald-200 text-sm">
               <span>
-                By <span className="font-semibold">{data.author?.username || "Unknown"}</span>
+                By{" "}
+                <span className="font-semibold">
+                  {data.author?.username || "Unknown"}
+                </span>
               </span>
               <span aria-hidden="true">•</span>
               <time dateTime={data.date}>
@@ -187,8 +199,11 @@ const BlogDetails = () => {
                 })}
               </time>
             </div>
+            <p className="text-lg text-gray-400 mt-4 max-w-3xl mx-auto">
+              {data.description}
+            </p>
           </div>
-
+          {console.log("Blog content:", data)}
           {data.content ? (
             <article
               className="text-lg prose prose-invert prose-xl sm:prose-2xl max-w-none text-white bg-black/50 backdrop-blur-lg p-8 sm:p-10 rounded-2xl border border-emerald-500/20 shadow-lg shadow-emerald-500/20"

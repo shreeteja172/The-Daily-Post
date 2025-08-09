@@ -27,17 +27,6 @@ const EnhancedUploadDropzone = ({
     setIsDragOver(false);
   }, []);
 
-  const handleAreaClick = useCallback(() => {
-    const fileInput =
-      document.querySelector(
-        'input[type="file"][data-ut-element="upload-input"]'
-      ) || document.querySelector('input[type="file"]');
-    if (fileInput) {
-    fileInput.value = "";
-    fileInput.click();
-  }
-  }, []);
-
   if (uploadedImageUrl) {
     return (
       <div className={`relative group ${className}`}>
@@ -108,9 +97,7 @@ const EnhancedUploadDropzone = ({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        onClick={handleAreaClick}
       >
-        {/* Background Pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none"></div>
 
         {isUploading && (
@@ -158,10 +145,7 @@ const EnhancedUploadDropzone = ({
           }}
           content={{
             uploadIcon: () => (
-              <div
-                className="relative mb-6 cursor-pointer"
-                onClick={handleAreaClick}
-              >
+              <div className="relative mb-6 cursor-pointer">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-teal-600/20 rounded-full blur-xl"></div>
                 <div className="relative w-16 h-16 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 rounded-full flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/30">
                   <svg

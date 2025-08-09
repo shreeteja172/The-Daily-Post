@@ -4,42 +4,50 @@ const BlogCard = ({ blog, onReadMore }) => {
   const { _id, title, content, imageUrl, author, createdAt, date } = blog;
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+    <div className="relative bg-black/50 backdrop-blur-lg border border-emerald-500/20 rounded-xl shadow-xl shadow-emerald-500/10 overflow-hidden transition-all duration-300 hover:shadow-emerald-500/30 hover:border-emerald-500/30 group">
       {imageUrl && (
-        <div className="w-full overflow-hidden">
+        <div className="relative w-full aspect-[16/9] overflow-hidden">
           <img
             src={imageUrl}
-            alt={title}
-            className="w-full h-auto object-contain hover:scale-105 transition-transform duration-300"
+            alt={title || "Blog image"}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+            decoding="async"
             onError={(e) => {
-              e.target.style.display = "none";
+              e.target.src = "https://via.placeholder.com/400x225?text=Image+Not+Found";
+              e.target.classList.add("opacity-50");
             }}
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         </div>
       )}
 
-      <div className="p-6">
-        <h3 className="text-xl font-semibold text-gray-800 mb-2 line-clamp-2">
-          {title}
+      <div className="p-6 relative z-10">
+        <h3
+          className="text-xl sm:text-2xl font-bold text-white mb-3 line-clamp-2"
+          title={title}
+        >
+          {title || "Untitled Blog"}
         </h3>
-        <div className="text-gray-600 text-sm mb-4 line-clamp-3">
+        <div className="text-emerald-100/80 text-sm sm:text-base mb-4 line-clamp-3 leading-relaxed">
           {content ? (
             <div
               dangerouslySetInnerHTML={{
-                __html: content.slice(0, 220) + "...",
+                __html: content.slice(0, 150) + (content.length > 150 ? "..." : ""),
               }}
             />
           ) : (
-            <p>No description available...</p>
+            <p>No description available</p>
           )}
         </div>
 
-        <div className="flex justify-between items-center text-sm text-gray-500 mb-4">
-          <span className="flex items-center">
+        <div className="flex justify-between items-center text-sm text-emerald-100/70 mb-5">
+          <span className="flex items-center gap-2">
             <svg
-              className="w-4 h-4 mr-1"
+              className="w-5 h-5 text-emerald-400/70"
               fill="currentColor"
               viewBox="0 0 20 20"
+              aria-hidden="true"
             >
               <path
                 fillRule="evenodd"
@@ -49,11 +57,12 @@ const BlogCard = ({ blog, onReadMore }) => {
             </svg>
             {author?.username || "Anonymous"}
           </span>
-          <span className="flex items-center">
+          <span className="flex items-center gap-2">
             <svg
-              className="w-4 h-4 mr-1"
+              className="w-5 h-5 text-emerald-400/70"
               fill="currentColor"
               viewBox="0 0 20 20"
+              aria-hidden="true"
             >
               <path
                 fillRule="evenodd"
@@ -61,13 +70,20 @@ const BlogCard = ({ blog, onReadMore }) => {
                 clipRule="evenodd"
               />
             </svg>
-            {new Date(createdAt || date).toLocaleDateString()}
+            <time dateTime={createdAt || date}>
+              {new Date(createdAt || date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </time>
           </span>
         </div>
 
         <button
           onClick={() => onReadMore && onReadMore(blog)}
-          className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-2 px-4 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg"
+          className="relative w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white py-2.5 px-5 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-emerald-400/50 focus:ring-offset-2 focus:ring-offset-black/70"
+          aria-label={`Read full article: ${title || "Untitled Blog"}`}
         >
           Read Full Article
         </button>
