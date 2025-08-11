@@ -437,7 +437,7 @@ const Blogs = () => {
                   <span>{userPosts.length} posts</span>
                 </div>
                 <button
-                  className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300 font-medium text-sm lg:text-base"
+                  className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300 font-medium text-sm lg:text-base cursor-pointer"
                   onClick={() => navigate("/my-blogs")}
                 >
                   View All →
@@ -461,9 +461,10 @@ const Blogs = () => {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
                 {userPosts?.length > 0 ? (
-                  userPosts.slice(0, 8).map((post, index) => (
+                  userPosts.slice(0, 4).map((post, index) => (
                     <div
                       key={post._id || index}
+                      onClick={() => navigate(`/blogs/${post._id}`)}
                       className="group bg-gradient-to-br from-black/60 to-black/40 rounded-xl lg:rounded-2xl border border-emerald-500/20 overflow-hidden cursor-pointer transition-all duration-300 hover:border-emerald-400/40 hover:shadow-xl hover:shadow-emerald-500/20 hover:-translate-y-1"
                     >
                       <div className="relative w-full aspect-[16/10] overflow-hidden bg-emerald-500/5">
@@ -555,16 +556,13 @@ const Blogs = () => {
                         </div>
                       </div>
 
-                      <div className="p-4 lg:p-5">
-                        <h3 className="text-white font-semibold text-base lg:text-lg mb-2 line-clamp-2 group-hover:text-emerald-300 transition-colors duration-300">
+                      <div className="p-4 lg:p-5"
+                      >
+                        <h3
+                        className="text-white font-semibold text-base lg:text-lg mb-2 line-clamp-2 group-hover:text-emerald-300 transition-colors duration-300">
                           {post.title || "Untitled Post"}
                         </h3>
-                        <div className="text-emerald-100/80 text-sm leading-relaxed mb-2 line-clamp-2">
-                          {post.description
-                            ? post.description
-                            : post.content?.slice(0, 120) ||
-                              "No description available..."}
-                        </div>
+                       
                         <div
                           className="text-emerald-100/70 text-sm leading-relaxed line-clamp-3 mb-3"
                           dangerouslySetInnerHTML={{
@@ -649,7 +647,7 @@ const Blogs = () => {
                   <span>{posts.length} posts</span>
                 </div>
                 <button
-                  className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300 font-medium text-sm lg:text-base"
+                  className="text-emerald-400 hover:text-emerald-300 transition-colors duration-300 font-medium text-sm lg:text-base cursor-pointer"
                   onClick={() => navigate("/all-blogs")}
                 >
                   View All →
@@ -674,7 +672,7 @@ const Blogs = () => {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
                 {posts && posts.length > 0 ? (
-                  posts.slice(0, 12).map((post, index) => (
+                  posts.slice(0, 4).map((post, index) => (
                     <div
                       key={post._id || index}
                       onClick={() => navigate(`/blogs/${post._id}`)}

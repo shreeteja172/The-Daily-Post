@@ -110,7 +110,7 @@ const BlogCard = ({ blog, onReadMore }) => {
 
         <button
           onClick={() => onReadMore && onReadMore(blog)}
-          className="relative w-full bg-emerald-600 hover:bg-teal-600 text-white py-2.5 px-5 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400/40 focus:ring-offset-2 focus:ring-offset-black/70"
+          className="relative w-full bg-emerald-600 hover:bg-teal-600 text-white py-2.5 px-5 rounded-lg font-medium transition-all duration-200 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400/40 focus:ring-offset-2 focus:ring-offset-black/70 cursor-pointer"
           aria-label={`Read full article: ${title || "Untitled Blog"}`}
         >
           Read Full Article
