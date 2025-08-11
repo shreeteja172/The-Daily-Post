@@ -1,10 +1,37 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { Context } from "../lib/contextapi";
 
 const BlogCard = ({ blog, onReadMore }) => {
   const { _id, title, content, imageUrl, author, createdAt, date } = blog;
+  const { userData } = useContext(Context);
+  const navigate = useNavigate();
 
   return (
     <div className="relative bg-black/60 backdrop-blur-lg border border-emerald-500/20 rounded-2xl shadow-lg overflow-hidden transition-all duration-200 group hover:scale-101 hover:shadow-emerald-500/20">
+      {userData?._id === author?._id && (
+        <button
+          className="absolute top-4 right-4 z-20 bg-black/70 hover:bg-emerald-700 text-emerald-400 p-2 rounded-full shadow-lg transition"
+          title="Edit Blog"
+          aria-label="Edit Blog"
+          onClick={() => navigate("/create-blog", { state: { blog } })}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.5 19.213l-4 1 1-4L16.862 3.487z"
+            />
+          </svg>
+        </button>
+      )}
       {imageUrl && (
         <div className="relative w-full aspect-[16/9] overflow-hidden">
           <img
@@ -22,7 +49,6 @@ const BlogCard = ({ blog, onReadMore }) => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
         </div>
       )}
-
       <div className="p-6 relative z-10">
         <h3
           className="text-2xl font-bold mb-3 line-clamp-2 text-white"

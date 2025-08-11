@@ -6,18 +6,35 @@ import { Context } from "../lib/contextapi";
 import EnhancedUploadDropzone from "./EnhancedUploadDropzone";
 import RichEditor from "./RichEditor";
 
-const CreateBlog = ({ onClose, refetchPosts }) => {
+const CreateBlog = ({ onClose, refetchPosts, blog }) => {
   const { token } = useContext(Context);
-  const [data, setData] = useState({
-    title: "",
-    description: "",
-    content: "",
-    imageUrl: "",
-    date: new Date().toISOString().split("T")[0],
-    visibility: "public",
+  const [data, setData] = useState(() => {
+    if (blog) {
+      return {
+        title: blog.title || "",
+        description: blog.description || "",
+        content: blog.content || "",
+        imageUrl: blog.imageUrl || "",
+        date: blog.date
+          ? new Date(blog.date).toISOString().split("T")[0]
+          : new Date().toISOString().split("T")[0],
+        visibility: blog.visibility || "public",
+        _id: blog._id,
+      };
+    }
+    return {
+      title: "",
+      description: "",
+      content: "",
+      imageUrl: "",
+      date: new Date().toISOString().split("T")[0],
+      visibility: "public",
+    };
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(
+    blog?.imageUrl || ""
+  );
 
   const handleCreatePost = async (e) => {
     e.preventDefault();
@@ -31,19 +48,35 @@ const CreateBlog = ({ onClose, refetchPosts }) => {
         visibility: data.visibility,
         imageUrl: uploadedImageUrl || data.imageUrl,
       };
+      let response;
+      if (data._id) {
+        // Edit mode
+        response = await axios.put(
+          `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${data._id}`,
+          postData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } else {
+        // Create mode
+        response = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/api/blogs/createblogs`,
+          postData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/api/blogs/createblogs`,
-        postData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 201) {
-        toast.success("Post created successfully!");
+      if (response.status === 201 || response.status === 200) {
+        toast.success(
+          data._id ? "Post updated successfully!" : "Post created successfully!"
+        );
         setData({
           title: "",
           description: "",
@@ -56,14 +89,19 @@ const CreateBlog = ({ onClose, refetchPosts }) => {
         if (refetchPosts) refetchPosts();
         if (onClose) onClose();
       } else {
-        toast.error("Failed to create post");
+        toast.error(
+          data._id ? "Failed to update post" : "Failed to create post"
+        );
       }
     } catch (error) {
-      console.error("Error creating post:", error);
+      console.error(
+        data._id ? "Error updating post:" : "Error creating post:",
+        error
+      );
       if (error.response?.data?.message) {
         toast.error(error.response.data.message);
       } else {
-        toast.error("An error occurred while creating the post");
+        toast.error("An error occurred while submitting the post");
       }
     } finally {
       setIsLoading(false);
@@ -189,7 +227,9 @@ const CreateBlog = ({ onClose, refetchPosts }) => {
                 </label>
                 <EnhancedUploadDropzone
                   onUploadComplete={(url) => setUploadedImageUrl(url)}
-                  onUploadError={(error) => console.error("Upload error:", error)}
+                  onUploadError={(error) =>
+                    console.error("Upload error:", error)
+                  }
                   uploadedImageUrl={uploadedImageUrl}
                   onRemoveImage={() => setUploadedImageUrl("")}
                 />
@@ -201,7 +241,9 @@ const CreateBlog = ({ onClose, refetchPosts }) => {
                   className="flex items-center gap-2 mb-2 font-medium text-emerald-300 text-sm"
                 >
                   🔗 Or Paste Image URL
-                  <span className="text-xs text-gray-400">(Optional fallback)</span>
+                  <span className="text-xs text-gray-400">
+                    (Optional fallback)
+                  </span>
                 </label>
                 <input
                   type="url"
@@ -220,7 +262,8 @@ const CreateBlog = ({ onClose, refetchPosts }) => {
                 />
                 {uploadedImageUrl && (
                   <div className="mt-3 p-3 bg-emerald-900/20 border border-emerald-500/20 rounded-xl text-emerald-300 text-sm shadow-inner">
-                    <span className="font-medium">Note:</span> Uploaded image overrides URL input for priority.
+                    <span className="font-medium">Note:</span> Uploaded image
+                    overrides URL input for priority.
                   </div>
                 )}
               </div>

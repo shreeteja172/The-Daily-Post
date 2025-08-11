@@ -26,6 +26,7 @@ function App() {
           <Route path="/blogs/:_id" element={<BlogDetails />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/about" element={<About />} />
+          <Route path="/edit-blog/:id" element={<CreateBlogPage />} />
         </Route>
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />

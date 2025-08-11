@@ -1,10 +1,12 @@
 import React from "react";
 import Navigation from "../components/Navigation";
 import CreateBlog from "../components/CreateBlog";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const CreateBlogPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const blogToEdit = location.state?.blog;
 
   const handleClose = () => {
     navigate("/blogs");
@@ -46,7 +48,7 @@ const CreateBlogPage = () => {
                   </div>
                   <div>
                     <h2 className="text-xl font-semibold text-white">
-                      New Blog Post
+                      {blogToEdit ? "Edit Blog Post" : "New Blog Post"}
                     </h2>
                     <p className="text-emerald-100/60 text-sm">
                       Focus mode - distraction-free writing
@@ -77,7 +79,11 @@ const CreateBlogPage = () => {
             </div>
 
             <div className="p-2">
-              <CreateBlog onClose={handleClose} refetchPosts={handleRefetch} />
+              <CreateBlog
+                onClose={handleClose}
+                refetchPosts={handleRefetch}
+                blog={blogToEdit}
+              />
             </div>
           </div>
         </div>

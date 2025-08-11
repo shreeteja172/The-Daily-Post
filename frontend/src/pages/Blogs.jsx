@@ -1,10 +1,11 @@
 import Navigation from "../components/Navigation";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useContext, useState } from "react";
 import { Context } from "../lib/contextapi";
 import CreateBlog from "../components/CreateBlog";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Blogs = () => {
   const { userData, token } = useContext(Context);
@@ -62,6 +63,26 @@ const Blogs = () => {
   const handleCreatePost = () => {
     navigate("/create-blog");
   };
+
+  const deleteBlogMutation = useMutation({
+    mutationFn: async (blogId) => {
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${blogId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    },
+    onSuccess: () => {
+      refetch();
+    },
+    onError: () => {
+      alert("Failed to delete blog. Please try again.");
+    },
+  });
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -443,7 +464,6 @@ const Blogs = () => {
                   userPosts.slice(0, 8).map((post, index) => (
                     <div
                       key={post._id || index}
-                      onClick={() => navigate(`/blogs/${post._id}`)}
                       className="group bg-gradient-to-br from-black/60 to-black/40 rounded-xl lg:rounded-2xl border border-emerald-500/20 overflow-hidden cursor-pointer transition-all duration-300 hover:border-emerald-400/40 hover:shadow-xl hover:shadow-emerald-500/20 hover:-translate-y-1"
                     >
                       <div className="relative w-full aspect-[16/10] overflow-hidden bg-emerald-500/5">
@@ -476,7 +496,16 @@ const Blogs = () => {
                         </div>
                         <div className="absolute top-2 right-2 lg:top-3 lg:right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                           <div className="flex gap-1">
-                            <button className="bg-black/50 text-emerald-400 hover:text-emerald-300 p-1.5 rounded-full backdrop-blur-sm transition-colors">
+                            <button
+                              className="bg-black/50 text-emerald-400 hover:text-emerald-300 p-1.5 rounded-full backdrop-blur-sm transition-colors"
+                              title="Edit Blog"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate("/create-blog", {
+                                  state: { blog: post },
+                                });
+                              }}
+                            >
                               <svg
                                 className="w-4 h-4"
                                 fill="none"
@@ -487,11 +516,27 @@ const Blogs = () => {
                                   strokeLinecap="round"
                                   strokeLinejoin="round"
                                   strokeWidth={1.5}
-                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                  d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.5 19.213l-4 1 1-4L16.862 3.487z"
                                 />
                               </svg>
                             </button>
-                            <button className="bg-black/50 text-red-400 hover:text-red-300 p-1.5 rounded-full backdrop-blur-sm transition-colors">
+                            <button
+                              className="bg-black/50 text-red-400 hover:text-red-300 p-1.5 rounded-full backdrop-blur-sm transition-colors"
+                              title="Delete Blog"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (
+                                  window.confirm(
+                                    "Are you sure you want to delete this blog?"
+                                  )
+                                ) {
+                                  deleteBlogMutation.mutate(post._id);
+                                  toast.success("Blog deleted successfully", {
+                                    duration: 2000,
+                                  });
+                                }
+                              }}
+                            >
                               <svg
                                 className="w-4 h-4"
                                 fill="none"
@@ -514,6 +559,12 @@ const Blogs = () => {
                         <h3 className="text-white font-semibold text-base lg:text-lg mb-2 line-clamp-2 group-hover:text-emerald-300 transition-colors duration-300">
                           {post.title || "Untitled Post"}
                         </h3>
+                        <div className="text-emerald-100/80 text-sm leading-relaxed mb-2 line-clamp-2">
+                          {post.description
+                            ? post.description
+                            : post.content?.slice(0, 120) ||
+                              "No description available..."}
+                        </div>
                         <div
                           className="text-emerald-100/70 text-sm leading-relaxed line-clamp-3 mb-3"
                           dangerouslySetInnerHTML={{
@@ -528,7 +579,7 @@ const Blogs = () => {
                               ? new Date(post.date).toLocaleDateString()
                               : "Recent"}
                           </span>
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <svg
                               className="w-3 h-3"
                               fill="none"
@@ -539,16 +590,9 @@ const Blogs = () => {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth={2}
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                              />
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                d="M9 5l7 7-7 7"
                               />
                             </svg>
-                            <span>Read more</span>
                           </div>
                         </div>
                       </div>
@@ -567,7 +611,7 @@ const Blogs = () => {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           strokeWidth={1.5}
-                          d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
+                          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                         />
                       </svg>
                     </div>
