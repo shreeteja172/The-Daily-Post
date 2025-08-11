@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import BlogCard from "../components/BlogCard";
-import { useMemo } from "react";
+import { useMemo,useState } from "react";
 const fetchAllBlogs = async ({ pageParam }) => {
   const response = await axios.get(
     `${import.meta.env.VITE_BACKEND_URL}/api/blogs/myBlogs?_limit=8&_page=${
@@ -24,15 +24,9 @@ const fetchAllBlogs = async ({ pageParam }) => {
 
 const InfiniteOwnBlogs = () => {
   const navigate = useNavigate();
+  const [visibleCount, setVisibleCount] = useState(6);
 
-  const {
-    data,
-    isLoading,
-    isError,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
+  const { data, isLoading, isError } = useInfiniteQuery({
     queryKey: ["myBlogs"],
     queryFn: fetchAllBlogs,
     initialPageParam: 1,
@@ -44,15 +38,15 @@ const InfiniteOwnBlogs = () => {
   });
 
   const uniqueBlogs = useMemo(() => {
-      const seen = new Set();
-      return data?.pages.flat().filter((blog) => {
-        if (!blog || !blog._id) return false;
-        if (seen.has(blog._id)) return false;
-        seen.add(blog._id);
-        return true;
-      });
-    }, [data]);
-    // console.log("Unique blogs:", uniqueBlogs);
+    const seen = new Set();
+    return data?.pages.flat().filter((blog) => {
+      if (!blog || !blog._id) return false;
+      if (seen.has(blog._id)) return false;
+      seen.add(blog._id);
+      return true;
+    });
+  }, [data]);
+  // console.log("Unique blogs:", uniqueBlogs);
 
   const handleReadMore = (blog) => {
     navigate(`/blogs/${blog._id}`);
@@ -121,38 +115,38 @@ const InfiniteOwnBlogs = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {uniqueBlogs?.map((blog) =>
-                  <BlogCard
-                    key={blog._id}
-                    onClick={() => navigate(`/blogs/${blog._id}`)}
-                    blog={blog}
-                    onReadMore={handleReadMore}
-                  />
+              {uniqueBlogs?.slice(0, visibleCount).map((blog) => (
+                <BlogCard
+                  key={blog._id}
+                  onClick={() => navigate(`/blogs/${blog._id}`)}
+                  blog={blog}
+                  onReadMore={handleReadMore}
+                />
+              ))}
+            </div>
+
+            <div className="text-center mt-8">
+              {visibleCount < uniqueBlogs.length && (
+                <button
+                  onClick={() => setVisibleCount((prev) => prev + 6)}
+                  className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30 font-medium"
+                >
+                  Show More
+                </button>
               )}
             </div>
 
-            {hasNextPage && (
-              <div className="text-center mt-8">
-                <button
-                  onClick={() => fetchNextPage()}
-                  disabled={isFetchingNextPage}
-                  className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 disabled:from-gray-600 disabled:to-gray-700 text-white px-8 py-3 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30 font-medium"
-                >
-                  {isFetchingNextPage
-                    ? "Loading More..."
-                    : "Load More of My Blogs"}
-                </button>
-              </div>
-            )}
-
-            {!hasNextPage && uniqueBlogs?.flat().length > 0 && (
+            {visibleCount >= uniqueBlogs.length && (
               <div className="text-center mt-8">
                 <p className="text-emerald-100/60">
                   You've reached the end of your blog posts!
                 </p>
+                <p className="text-emerald-100/40 text-sm mt-2">
+                  You can create more blogs to share your thoughts with the
+                  world!
+                </p>
               </div>
             )}
-
             {(!uniqueBlogs || uniqueBlogs.flat().length === 0) && (
               <div className="text-center py-12">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-black/30 rounded-full mb-4">

@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import BlogCard from "../components/BlogCard";
-import { useMemo } from "react";
+import { useMemo,useState } from "react";
 
 const fetchAllBlogs = async ({ pageParam }) => {
   const response = await axios.get(
@@ -44,15 +44,9 @@ const SkeletonLoader = () => (
 
 const InfiniteBlogsAll = () => {
   const navigate = useNavigate();
+  const [visibleCount, setVisibleCount] = useState(6);
 
-  const {
-    data,
-    isLoading,
-    isError,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
+  const { data, isLoading, isError } = useInfiniteQuery({
     queryKey: ["allBlogs"],
     queryFn: fetchAllBlogs,
     initialPageParam: 1,
@@ -142,7 +136,7 @@ const InfiniteBlogsAll = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {uniqueBlogs.map((blog) => (
+              {uniqueBlogs.slice(0, visibleCount).map((blog) => (
                 <BlogCard
                   key={blog._id}
                   blog={blog}
@@ -151,19 +145,18 @@ const InfiniteBlogsAll = () => {
               ))}
             </div>
 
-            {hasNextPage && (
-              <div className="text-center mt-8">
+            <div className="text-center mt-8">
+              {visibleCount < uniqueBlogs.length && (
                 <button
-                  onClick={() => fetchNextPage()}
-                  disabled={isFetchingNextPage}
-                  className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 disabled:from-gray-600 disabled:to-gray-700 text-white px-8 py-3 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30 font-medium"
+                  onClick={() => setVisibleCount((prev) => prev + 6)}
+                  className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-8 py-3 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30 font-medium"
                 >
-                  {isFetchingNextPage ? "Loading More..." : "Load More Blogs"}
+                  Show More
                 </button>
-              </div>
-            )}
+              )}
+            </div>
 
-            {!hasNextPage && uniqueBlogs?.flat().length > 0 && (
+            {visibleCount >= uniqueBlogs.length && (
               <div className="text-center mt-8">
                 <p className="text-emerald-100/60">
                   You've reached the end of all blogs!
