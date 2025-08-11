@@ -139,7 +139,7 @@ router.put("/profile", authMiddleware, async (req, res) => {
   if (!parsed.success) {
     return res.status(400).json({ message: "Invalid input" });
   }
-  const { password, firstName, lastName } = parsed.data;
+  const { password, firstName, lastName, profileImage } = parsed.data;
   try {
     const user = await User.findById(userId);
     if (!user) {
@@ -152,6 +152,7 @@ router.put("/profile", authMiddleware, async (req, res) => {
     }
     if (firstName) user.firstName = firstName;
     if (lastName) user.lastName = lastName;
+    if (profileImage) user.profileImage = profileImage;
 
     const updatedUser = await user.save();
     res.status(200).json({
@@ -162,6 +163,7 @@ router.put("/profile", authMiddleware, async (req, res) => {
         email: updatedUser.email,
         firstName: updatedUser.firstName,
         lastName: updatedUser.lastName,
+        profileImage: updatedUser.profileImage,
       },
     });
   } catch (error) {

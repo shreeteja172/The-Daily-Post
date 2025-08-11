@@ -28,7 +28,8 @@ router.post(
           error: "Invalid input",
         });
       }
-      const { title,description, content, date, visibility, imageUrl } = parsed.data;
+      const { title, description, content, date, visibility, imageUrl } =
+        parsed.data;
       //   console.log("Parsed data:", parsed.data);
       const authorId = req.userid;
 
@@ -129,10 +130,9 @@ router.get(
     const userId = req.userid;
 
     try {
-      const blog = await Blog.findById(blogId).populate(
-        "author",
-        "username email"
-      );
+      const blog = await Blog.findById(blogId)
+        .select("+description")
+        .populate("author", "username email");
       if (!blog) {
         return res.status(404).json({ message: "Blog not found" });
       }
@@ -192,7 +192,8 @@ router.put(
           error: "Invalid input",
         });
       }
-      const { title,description, content, date, visibility, imageUrl } = parsed.data;
+      const { title, description, content, date, visibility, imageUrl } =
+        parsed.data;
       // console.log("Parsed data for update:", parsed.data);
       const updateData = { title, content };
       if (date) {

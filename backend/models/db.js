@@ -43,6 +43,10 @@ const UserSchema = new mongoose.Schema({
     required: true,
     maxLength: 50,
   },
+  profileImage: {
+    type: String,
+    default: "",
+  },
 });
 
 UserSchema.methods.createHash = async function (plainTextPassword) {
