@@ -26,12 +26,12 @@ const CreateBlogPage = () => {
 
       <Navigation />
       <main className="relative z-10 md:ml-24 pt-16 md:pt-8">
-        <div className="w-full px-4 py-4">
+        <div className="w-full px-2 py-2 sm:px-4 sm:py-4">
           <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 shadow-2xl shadow-emerald-500/10 overflow-hidden">
-            <div className="bg-gradient-to-r from-emerald-500/10 to-teal-600/10 border-b border-emerald-500/20 px-6 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-400/20 to-teal-600/20 rounded-xl flex items-center justify-center">
+            <div className="bg-gradient-to-r from-emerald-500/10 to-teal-600/10 border-b border-emerald-500/20 px-3 py-3 sm:px-6 sm:py-4">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                <div className="flex items-center space-x-3 sm:space-x-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-400/20 to-teal-600/20 rounded-xl flex items-center justify-center">
                     <svg
                       className="w-6 h-6 text-emerald-400"
                       fill="none"
@@ -47,10 +47,10 @@ const CreateBlogPage = () => {
                     </svg>
                   </div>
                   <div>
-                    <h2 className="text-xl font-semibold text-white">
+                    <h2 className="text-lg sm:text-xl font-semibold text-white">
                       {blogToEdit ? "Edit Blog Post" : "New Blog Post"}
                     </h2>
-                    <p className="text-emerald-100/60 text-sm">
+                    <p className="text-emerald-100/60 text-xs sm:text-sm">
                       Focus mode - distraction-free writing
                     </p>
                   </div>
@@ -58,7 +58,7 @@ const CreateBlogPage = () => {
 
                 <button
                   onClick={handleClose}
-                  className="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 rounded-full p-2 transition-all duration-300"
+                  className="text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 rounded-full p-2 transition-all duration-300 self-start sm:self-auto"
                   title="Close and go back"
                 >
                   <svg
@@ -78,7 +78,7 @@ const CreateBlogPage = () => {
               </div>
             </div>
 
-            <div className="p-2">
+            <div className="p-1 sm:p-2">
               <CreateBlog
                 onClose={handleClose}
                 refetchPosts={handleRefetch}

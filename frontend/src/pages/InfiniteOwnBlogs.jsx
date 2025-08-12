@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import BlogCard from "../components/BlogCard";
-import { useMemo,useState } from "react";
+import { useMemo, useState } from "react";
 const fetchAllBlogs = async ({ pageParam }) => {
   const response = await axios.get(
     `${import.meta.env.VITE_BACKEND_URL}/api/blogs/myBlogs?_limit=8&_page=${
@@ -63,7 +63,27 @@ const InfiniteOwnBlogs = () => {
         <Navigation />
         <main className="relative z-10 md:ml-24 pt-20 md:pt-8">
           <div className="max-w-7xl mx-auto px-6 py-8">
-            <div className="text-center text-white text-xl">
+            <div className="flex flex-col items-center justify-center text-center text-white text-xl">
+              <svg
+                className="animate-spin h-10 w-10 text-emerald-400 mb-4"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
               Loading your blogs...
             </div>
           </div>
@@ -136,6 +156,14 @@ const InfiniteOwnBlogs = () => {
               )}
             </div>
 
+            {visibleCount < uniqueBlogs.length && (
+              <div className="text-center mt-4">
+                <p className="text-emerald-100/60">
+                  Showing {visibleCount} of {uniqueBlogs.length} blogs.
+                </p>
+              </div>
+            )}
+
             {visibleCount >= uniqueBlogs.length && (
               <div className="text-center mt-8">
                 <p className="text-emerald-100/60">
@@ -171,7 +199,7 @@ const InfiniteOwnBlogs = () => {
                   Start sharing your thoughts with the world!
                 </p>
                 <button
-                  onClick={() => navigate("/blogs")}
+                  onClick={() => navigate("/create-blog")}
                   className="mt-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-2 rounded-lg transition-all duration-300 shadow-lg shadow-emerald-500/30"
                 >
                   Create Your First Post

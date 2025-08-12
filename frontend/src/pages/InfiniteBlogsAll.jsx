@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import BlogCard from "../components/BlogCard";
-import { useMemo,useState } from "react";
+import { useMemo, useState } from "react";
 
 const fetchAllBlogs = async ({ pageParam }) => {
   const response = await axios.get(
@@ -55,7 +55,7 @@ const InfiniteBlogsAll = () => {
       const nextPage = allpages.length + 1;
       return nextPage;
     },
-    staleTime: 5000,
+    staleTime: 60 * 100,
   });
 
   const handleReadMore = (blog) => {

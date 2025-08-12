@@ -116,17 +116,20 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
       >
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 flex-1">
           <div className="flex flex-col space-y-6 bg-black/30 p-6 md:p-8 rounded-3xl border border-emerald-500/20 backdrop-blur-md shadow-xl shadow-emerald-900/20 transition-all duration-300 hover:shadow-emerald-900/40">
-            <div className="flex justify-between items-start mb-6">
-              <div>
-                <h2 className="text-3xl font-bold text-emerald-400 mb-2 flex items-center gap-3">
-                  📋 Blog Details
+            <div className="flex flex-col gap-4 sm:flex-row sm:justify-between items-start mb-6">
+              <div className="w-full sm:w-auto">
+                <h2 className="text-2xl sm:text-3xl font-bold text-emerald-400 mb-2 flex items-center gap-2 sm:gap-3">
+                  <span className="text-xl sm:text-2xl">📋</span> Blog Details
                 </h2>
-                <p className="text-gray-300 text-sm">
+                <p className="text-gray-300 text-xs sm:text-sm">
                   Provide the essentials for your captivating blog post
                 </p>
               </div>
-              <div className="min-w-[200px]">
-                <label className="block mb-2 font-medium text-emerald-300 text-sm">
+              <div className="w-full sm:w-auto min-w-[160px] sm:min-w-[200px] mt-2 sm:mt-0">
+                <label className="mb-2 font-medium text-emerald-300 text-xs sm:text-sm flex items-center gap-1">
+                  <span className="inline-block text-lg sm:text-xl align-middle">
+                    {data.visibility === "public" ? "🌐" : "🔒"}
+                  </span>
                   Visibility
                 </label>
                 <div className="flex items-center bg-black/70 backdrop-blur-2xl border border-emerald-500/30 rounded-full p-1 shadow-lg shadow-emerald-500/20 relative overflow-hidden transition-all duration-300 hover:shadow-emerald-500/40">
@@ -141,7 +144,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
                   <button
                     type="button"
                     onClick={() => setData({ ...data, visibility: "public" })}
-                    className={`relative z-10 flex-1 px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 ${
+                    className={`relative z-10 flex-1 px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-full transition-all duration-300 ${
                       data.visibility === "public"
                         ? "bg-emerald-600/80 text-white shadow-md shadow-emerald-600/50"
                         : "text-emerald-200 hover:bg-emerald-500/10 hover:text-white"
@@ -152,7 +155,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
                   <button
                     type="button"
                     onClick={() => setData({ ...data, visibility: "private" })}
-                    className={`relative z-10 flex-1 px-4 py-2 text-sm font-semibold rounded-full transition-all duration-300 ${
+                    className={`relative z-10 flex-1 px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-full transition-all duration-300 ${
                       data.visibility === "private"
                         ? "bg-red-600/80 text-white shadow-md shadow-red-600/50"
                         : "text-emerald-200 hover:bg-red-500/10 hover:text-white"
@@ -164,11 +167,11 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label
                   htmlFor="title"
-                  className="block mb-2 font-medium text-emerald-300 text-sm"
+                  className="block mb-2 font-medium text-emerald-300 text-xs sm:text-sm"
                 >
                   Title *
                 </label>
@@ -177,7 +180,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
                   id="title"
                   value={data.title}
                   onChange={(e) => setData({ ...data, title: e.target.value })}
-                  className="w-full p-3 bg-black/50 border border-emerald-500/30 rounded-xl text-white placeholder-gray-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200"
+                  className="w-full p-2 sm:p-3 bg-black/50 border border-emerald-500/30 rounded-xl text-white placeholder-gray-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200 text-xs sm:text-base"
                   placeholder="Craft an engaging title..."
                   required
                 />
@@ -185,7 +188,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
               <div>
                 <label
                   htmlFor="date"
-                  className="block mb-2 font-medium text-emerald-300 text-sm"
+                  className="block mb-2 font-medium text-emerald-300 text-xs sm:text-sm"
                 >
                   Publication Date *
                 </label>
@@ -194,7 +197,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
                   id="date"
                   value={data.date}
                   onChange={(e) => setData({ ...data, date: e.target.value })}
-                  className="w-full p-3 bg-black/50 border border-emerald-500/30 rounded-xl text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200"
+                  className="w-full p-2 sm:p-3 bg-black/50 border border-emerald-500/30 rounded-xl text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200 text-xs sm:text-base"
                   required
                 />
               </div>
@@ -203,7 +206,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
             <div>
               <label
                 htmlFor="description"
-                className="block mb-2 font-medium text-emerald-300 text-sm"
+                className="block mb-2 font-medium text-emerald-300 text-xs sm:text-sm"
               >
                 Description *
               </label>
@@ -213,17 +216,17 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
                 onChange={(e) =>
                   setData({ ...data, description: e.target.value })
                 }
-                className="w-full p-3 bg-black/50 border border-emerald-500/30 rounded-xl text-white placeholder-gray-500 resize-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200"
+                className="w-full p-2 sm:p-3 bg-black/50 border border-emerald-500/30 rounded-xl text-white placeholder-gray-500 resize-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200 text-xs sm:text-base"
                 placeholder="Tease your readers with a compelling summary..."
                 rows="4"
                 required
               />
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               <div>
-                <label className="mb-3 font-medium text-emerald-300 text-sm flex items-center gap-2">
-                  📸 Featured Image
+                <label className="mb-2 sm:mb-3 font-medium text-emerald-300 text-xs sm:text-sm flex items-center gap-1 sm:gap-2">
+                  <span className="text-lg sm:text-xl">📸</span> Featured Image
                 </label>
                 <EnhancedUploadDropzone
                   onUploadComplete={(url) => setUploadedImageUrl(url)}
@@ -238,9 +241,10 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
               <div className="relative">
                 <label
                   htmlFor="imageUrl"
-                  className="flex items-center gap-2 mb-2 font-medium text-emerald-300 text-sm"
+                  className="flex items-center gap-1 sm:gap-2 mb-2 font-medium text-emerald-300 text-xs sm:text-sm"
                 >
-                  🔗 Or Paste Image URL
+                  <span className="text-lg sm:text-xl">🔗</span> Or Paste Image
+                  URL
                   <span className="text-xs text-gray-400">
                     (Optional fallback)
                   </span>
@@ -252,7 +256,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
                   onChange={(e) =>
                     setData({ ...data, imageUrl: e.target.value })
                   }
-                  className={`w-full p-3 bg-black/50 border rounded-xl text-white placeholder-gray-500 transition-all duration-200 ${
+                  className={`w-full p-2 sm:p-3 bg-black/50 border rounded-xl text-white placeholder-gray-500 transition-all duration-200 text-xs sm:text-base ${
                     uploadedImageUrl
                       ? "border-gray-600/50 opacity-60 cursor-not-allowed"
                       : "border-emerald-500/30 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50"
@@ -261,7 +265,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
                   disabled={!!uploadedImageUrl}
                 />
                 {uploadedImageUrl && (
-                  <div className="mt-3 p-3 bg-emerald-900/20 border border-emerald-500/20 rounded-xl text-emerald-300 text-sm shadow-inner">
+                  <div className="mt-2 sm:mt-3 p-2 sm:p-3 bg-emerald-900/20 border border-emerald-500/20 rounded-xl text-emerald-300 text-xs sm:text-sm shadow-inner">
                     <span className="font-medium">Note:</span> Uploaded image
                     overrides URL input for priority.
                   </div>
@@ -269,15 +273,15 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
               </div>
             </div>
 
-            <div className="mt-auto pt-4">
+            <div className="mt-auto pt-2 sm:pt-4">
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-4 px-6 rounded-2xl shadow-lg shadow-emerald-600/30 hover:from-emerald-600 hover:to-teal-700 hover:shadow-emerald-600/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-2xl shadow-lg shadow-emerald-600/30 hover:from-emerald-600 hover:to-teal-700 hover:shadow-emerald-600/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-base"
                 disabled={isLoading}
               >
                 {isLoading ? (
-                  <div className="flex items-center justify-center gap-3">
-                    <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <div className="flex items-center justify-center gap-2 sm:gap-3">
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 sm:border-3 border-white border-t-transparent rounded-full animate-spin"></div>
                     Publishing Your Masterpiece...
                   </div>
                 ) : (
@@ -287,12 +291,12 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
             </div>
           </div>
 
-          <div className="flex flex-col bg-black/30 p-6 md:p-8 rounded-3xl border border-emerald-500/20 backdrop-blur-md shadow-xl shadow-emerald-900/20 transition-all duration-300 hover:shadow-emerald-900/40">
-            <div className="mb-6">
-              <h2 className="text-3xl font-bold text-emerald-400 mb-2 flex items-center gap-3">
-                📝 Content Canvas
+          <div className="flex flex-col bg-black/30 p-4 sm:p-6 md:p-8 rounded-3xl border border-emerald-500/20 backdrop-blur-md shadow-xl shadow-emerald-900/20 transition-all duration-300 hover:shadow-emerald-900/40 mt-4 sm:mt-0">
+            <div className="mb-4 sm:mb-6">
+              <h2 className="text-2xl sm:text-3xl font-bold text-emerald-400 mb-2 flex items-center gap-2 sm:gap-3">
+                <span className="text-xl sm:text-2xl">📝</span> Content Canvas
               </h2>
-              <p className="text-gray-300 text-sm">
+              <p className="text-gray-300 text-xs sm:text-sm">
                 Unleash your creativity in this powerful rich text editor
               </p>
             </div>

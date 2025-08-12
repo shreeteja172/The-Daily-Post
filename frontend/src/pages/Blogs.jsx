@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const Blogs = () => {
-  const { userData, token } = useContext(Context);
+  const {  token } = useContext(Context);
   const [showCreateBlog, setShowCreateBlog] = useState(false);
   const navigate = useNavigate();
 
@@ -220,11 +220,7 @@ const Blogs = () => {
                         hello 👋
                       </p>
                     </div>
-                    <div className="hidden sm:block">
-                      <div className="bg-emerald-500/15 border border-emerald-500/25 rounded-full px-3 py-1.5 text-emerald-300 text-xs font-medium">
-                        ✨ Rich Editor
-                      </div>
-                    </div>
+                    
                   </div>
 
                   <div className="bg-black/35 rounded-2xl border border-emerald-500/15 p-6 shadow-inner">
@@ -299,7 +295,6 @@ const Blogs = () => {
 
                   <div className="flex items-center justify-between mt-5 text-sm text-emerald-100/60">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-emerald-400/70 rounded-full animate-pulse"></div>
                       <span>Ready to go whenever you are</span>
                     </div>
                     <span className="hidden sm:inline">

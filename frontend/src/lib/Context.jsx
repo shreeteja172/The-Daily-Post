@@ -66,7 +66,7 @@ const ContextProvider = ({ children }) => {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mb-4"></div>
-          <p className="text-emerald-100/70">Loading user data...</p>
+          <p className="text-emerald-100/70">Loading...</p>
         </div>
       </div>
     );
@@ -99,7 +99,7 @@ const ContextProvider = ({ children }) => {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mb-4"></div>
-          <p className="text-emerald-100/70">Loading user data...</p>
+          <p className="text-emerald-100/70">Loading...</p>
         </div>
       </div>
     );
