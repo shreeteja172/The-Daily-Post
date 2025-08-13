@@ -199,10 +199,28 @@ const BlogDetails = () => {
                 })}
               </time>
             </div>
-          {console.log("Blog content:", data)}
-            <p className="text-lg text-gray-400 mt-4 max-w-3xl mx-auto">
-              {data.description}
-            </p>
+            {/* {console.log("Blog content:", data)} */}
+            <div className="relative flex items-center justify-center mt-6 mb-2">
+              <span className="absolute left-0 text-emerald-400 animate-bounce">
+                <svg width="32" height="32" fill="none" viewBox="0 0 24 24">
+                  <path
+                    stroke="#14b8a6"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 20v-8m0 0l-4 4m4-4l4 4"
+                  />
+                </svg>
+              </span>
+              <div className="w-full max-w-3xl mx-auto px-6 py-5 bg-black/40 backdrop-blur-xl rounded-xl border border-emerald-500/20 shadow-lg shadow-emerald-500/10 transition-all duration-500 hover:scale-[1.02] hover:shadow-emerald-500/30 animate-fade-in">
+                <p className="text-lg text-emerald-100 font-medium tracking-wide leading-relaxed text-center">
+                  <span className="block text-emerald-400 font-semibold mb-1">
+                    Description:
+                  </span>
+                  {data.description}
+                </p>
+              </div>
+            </div>
           </div>
           {data.content ? (
             <article

@@ -19,7 +19,6 @@ const UserBlogs = () => {
         }
       );
       // console.log("user:", response);
-      toast.success("Blogs loaded successfully");
       return response.data;
     },
   });
@@ -31,6 +30,7 @@ const UserBlogs = () => {
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mb-4"></div>
           <p className="text-emerald-100/70">Loading your blogs...</p>
+          {toast.success("Your blogs loaded successfully")}
         </div>
       ) : blogs.length === 0 ? (
         <p className="text-center text-gray-500">No blogs found.</p>

@@ -34,7 +34,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState(
     blog?.imageUrl || ""
   );
-  console.log("CreateBlog data:", data);
+  // console.log("CreateBlog data:", data);
   const handleCreatePost = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -220,17 +220,20 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
               >
                 Description *
               </label>
-              
+
               <textarea
-              id="description"
-              placeholder="Tease your readers with a compelling summary..."
-              value={data.description}
-              onChange={(e) =>
-                setData((prev) => ({ ...prev, description: e.target.value }))
-              }
-              className="w-full p-2 sm:p-3 bg-black/50 border border-emerald-500/30 rounded-xl text-white placeholder-gray-500 resize-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200 text-xs sm:text-base"
-              rows="4"
+                id="description"
+                placeholder="Tease your readers with a compelling summary..."
+                value={data.description}
+                onChange={(e) =>
+                  setData((prev) => ({ ...prev, description: e.target.value }))
+                }
+                className="w-full p-2 sm:p-3 bg-black/50 border border-emerald-500/30 rounded-xl text-white placeholder-gray-500 resize-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200 text-xs sm:text-base"
+                rows="4"
               />
+              {/* <div>
+                {JSON.stringify(data)}
+              </div> */}
               {/* <p className="text-white">{data.description}</p> */}
 
               {/* upar bas debug karne */}

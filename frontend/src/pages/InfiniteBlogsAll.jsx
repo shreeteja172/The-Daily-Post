@@ -61,7 +61,7 @@ const InfiniteBlogsAll = () => {
   const handleReadMore = (blog) => {
     navigate(`/blogs/${blog._id}`);
   };
-  console.log("All pages:", data?.pages);
+  // console.log("All pages:", data?.pages);
 
   const uniqueBlogs = useMemo(() => {
     const seen = new Set();
@@ -73,7 +73,7 @@ const InfiniteBlogsAll = () => {
     });
   }, [data]);
 
-  console.log("Unique Blogs:", uniqueBlogs);
+  // console.log("Unique Blogs:", uniqueBlogs);
 
   if (isLoading) {
     return (
