@@ -8,6 +8,7 @@ const router = express.Router();
 
 const createBlogSchema = z.object({
   title: z.string().min(1),
+  description: z.string().optional().default(""),
   content: z.string().min(5),
   date: z.string().datetime().optional(),
   visibility: z.enum(["public", "private"]).optional().default("public"),
@@ -35,16 +36,16 @@ router.post(
 
       const newBlog = new Blog({
         title,
-        description,
+        description: typeof description === "undefined" ? "" : description,
         content,
         date: date || new Date().toISOString(),
         visibility: visibility || "public",
         imageUrl: imageUrl || "",
       });
-      // console.log("New blog data:", newBlog);
       newBlog.author = authorId;
       const savedBlog = await newBlog.save();
       await savedBlog.populate("author", "username email");
+      // console.log("New blog data:", newBlog);
       res.status(201).json({
         message: "Blog created successfully",
         blog: savedBlog,
@@ -218,6 +219,7 @@ router.put(
         message: "Blog updated successfully",
         blog: updatedBlog,
       });
+      // console.log("Updated blog data:", updatedBlog);
     } catch (error) {
       console.error("Error updating blog:", error);
       res.status(500).json({ message: "Internal server error" });

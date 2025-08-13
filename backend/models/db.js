@@ -68,7 +68,7 @@ const User = mongoose.model("User", UserSchema);
 const blogSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    description: { type: String, default: "" },
+    description: { type: String, required: true},
     content: { type: String, required: true },
     date: { type: Date, default: Date.now },
     author: {
