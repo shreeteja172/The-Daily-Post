@@ -27,7 +27,7 @@ const RichEditor = ({
   const [isFocused, setIsFocused] = useState(false);
   const [uploading, setUploading] = useState(false);
 
-  // Custom image handler with upload placeholder
+  // Custom image handler
   const imageHandler = () => {
     fileInputRef.current?.click();
   };
@@ -52,10 +52,10 @@ const RichEditor = ({
     e.target.value = "";
   };
 
+  // Initial setup
   useEffect(() => {
-    let quill;
     if (editorRef.current && !quillRef.current && !editorRef.current.__quill) {
-      quill = new Quill(editorRef.current, {
+      const quill = new Quill(editorRef.current, {
         theme: "snow",
         placeholder,
         modules: {
@@ -83,14 +83,13 @@ const RichEditor = ({
         }
       });
 
-      if (value) {
-        if (outputFormat === "delta" && typeof value === "object") {
-          quill.setContents(value);
-        } else if (outputFormat === "both" && value?.delta) {
-          quill.setContents(value.delta);
-        } else {
-          quill.root.innerHTML = value;
-        }
+      // Set initial value only if non-empty
+      if (value && typeof value === "string" && value.trim()) {
+        quill.root.innerHTML = value;
+      } else if (outputFormat === "delta" && typeof value === "object") {
+        quill.setContents(value);
+      } else if (outputFormat === "both" && value?.delta) {
+        quill.setContents(value.delta);
       }
 
       quill.root.addEventListener("focus", () => setIsFocused(true));
@@ -98,6 +97,7 @@ const RichEditor = ({
 
       quillRef.current = quill;
     }
+
     return () => {
       if (quillRef.current) {
         quillRef.current.off && quillRef.current.off();
@@ -117,9 +117,12 @@ const RichEditor = ({
     };
     // eslint-disable-next-line
   }, []);
+
+  // Sync when parent value changes
   useEffect(() => {
     const quill = quillRef.current;
     if (!quill) return;
+
     if (outputFormat === "delta" && typeof value === "object") {
       if (JSON.stringify(quill.getContents()) !== JSON.stringify(value)) {
         quill.setContents(value);
@@ -128,7 +131,11 @@ const RichEditor = ({
       if (JSON.stringify(quill.getContents()) !== JSON.stringify(value.delta)) {
         quill.setContents(value.delta);
       }
-    } else if (outputFormat === "html" && value !== quill.root.innerHTML) {
+    } else if (
+      outputFormat === "html" &&
+      typeof value === "string" &&
+      value.trim() !== quill.root.innerHTML.trim()
+    ) {
       const selection = quill.getSelection();
       quill.root.innerHTML = value || "";
       if (selection) {

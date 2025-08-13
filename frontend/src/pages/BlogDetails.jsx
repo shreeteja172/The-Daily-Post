@@ -22,18 +22,18 @@ const fetchBlogDetails = async (_id) => {
 };
 
 const SkeletonLoader = () => (
-  <div className="min-h-screen bg-black flex items-center justify-center px-2 sm:px-4">
-    <div className="w-full max-w-2xl sm:max-w-4xl md:max-w-6xl space-y-6">
-      <div className="w-full h-56 sm:h-80 md:h-96 bg-gray-800/20 rounded-2xl animate-pulse" />
+  <div className="min-h-screen bg-black flex items-center justify-center px-4">
+    <div className="w-full max-w-6xl space-y-6">
+      <div className="w-full h-96 bg-gray-800/20 rounded-2xl animate-pulse" />
       <div className="space-y-4">
-        <div className="h-10 sm:h-12 bg-gray-800/20 rounded-lg w-5/6 sm:w-3/4 mx-auto animate-pulse" />
-        <div className="h-5 sm:h-6 bg-gray-800/20 rounded-lg w-2/3 sm:w-1/2 mx-auto animate-pulse" />
+        <div className="h-12 bg-gray-800/20 rounded-lg w-3/4 mx-auto animate-pulse" />
+        <div className="h-6 bg-gray-800/20 rounded-lg w-1/2 mx-auto animate-pulse" />
       </div>
       <div className="space-y-3">
         {[...Array(4)].map((_, i) => (
           <div
             key={i}
-            className="h-3 sm:h-4 bg-gray-800/20 rounded-lg animate-pulse"
+            className="h-4 bg-gray-800/20 rounded-lg animate-pulse"
           />
         ))}
       </div>
@@ -42,21 +42,21 @@ const SkeletonLoader = () => (
 );
 
 const ErrorDisplay = ({ message, onRetry }) => (
-  <div className="min-h-screen bg-black flex items-center justify-center px-2 sm:px-4">
-    <div className="bg-black/60 backdrop-blur-2xl rounded-2xl border border-red-500/30 shadow-2xl p-4 sm:p-8 max-w-xs sm:max-w-md w-full text-center">
-      <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4">Error Loading Blog</h2>
-      <p className="text-emerald-100/80 mb-4 sm:mb-6 text-sm sm:text-base">{message}</p>
-      <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
+  <div className="min-h-screen bg-black flex items-center justify-center px-4">
+    <div className="bg-black/50 backdrop-blur-2xl rounded-2xl border border-red-500/30 shadow-2xl p-8 max-w-md w-full text-center">
+      <h2 className="text-2xl font-bold text-white mb-4">Error Loading Blog</h2>
+      <p className="text-emerald-100/80 mb-6">{message}</p>
+      <div className="flex justify-center gap-4">
         <button
           onClick={onRetry}
-          className="px-4 py-2 sm:px-6 sm:py-3 bg-emerald-500/20 border border-emerald-500/30 rounded-lg text-emerald-100 hover:bg-emerald-500/30 transition-all duration-300 text-sm sm:text-base"
+          className="px-6 py-3 bg-emerald-500/20 border border-emerald-500/30 rounded-lg text-emerald-100 hover:bg-emerald-500/30 transition-all duration-300"
           aria-label="Retry loading blog"
         >
           Retry
         </button>
         <button
           onClick={() => window.history.back()}
-          className="px-4 py-2 sm:px-6 sm:py-3 bg-black/30 border border-emerald-500/30 rounded-lg text-emerald-100 hover:bg-emerald-500/10 transition-all duration-300 text-sm sm:text-base"
+          className="px-6 py-3 bg-black/30 border border-emerald-500/30 rounded-lg text-emerald-100 hover:bg-emerald-500/10 transition-all duration-300"
           aria-label="Go back to blogs"
         >
           Go Back
@@ -134,57 +134,56 @@ const BlogDetails = () => {
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-black to-teal-600/20" />
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,.02)_1px,transparent_1px)] bg-[size:32px_32px]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-black to-teal-600/10" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,.015)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,.015)_1px,transparent_1px)] bg-[size:50px_50px]" />
 
       <div
-        className="fixed top-0 left-0 h-1 bg-emerald-500/70 z-50 transition-all duration-300"
+        className="fixed top-0 left-0 h-1 bg-emerald-500/50 z-50 transition-all duration-300"
         style={{ width: `${progress}%` }}
       />
 
-      <div className="relative z-10 pb-10 sm:pb-16">
-        <header className="fixed top-2 left-2 right-2 z-50 flex justify-between items-center max-w-2xl sm:max-w-4xl md:max-w-7xl mx-auto px-2 sm:px-4">
+      <div className="relative z-10 pb-16">
+        <header className="fixed top-4 left-4 right-4 z-50 flex justify-between items-center max-w-7xl mx-auto px-4">
           <button
             onClick={() => navigate("/blogs")}
-            className="p-2 sm:p-3 bg-black/60 rounded-full border border-emerald-500/30 text-emerald-100 hover:bg-emerald-500/30 transition-all duration-300 shadow-md"
+            className="p-2 bg-black/50 rounded-full border border-emerald-500/30 text-emerald-100 hover:bg-emerald-500/20 transition-all duration-300"
             aria-label="Back to blogs"
           >
-            <FiArrowLeft size={22} className="sm:size-24" />
+            <FiArrowLeft size={24} />
           </button>
           <button
             onClick={handleShare}
-            className="p-2 sm:p-3 bg-black/60 rounded-full border border-emerald-500/30 text-emerald-100 hover:bg-emerald-500/30 transition-all duration-300 shadow-md"
+            className="p-2 bg-black/50 rounded-full border border-emerald-500/30 text-emerald-100 hover:bg-emerald-500/20 transition-all duration-300"
             aria-label="Share blog post"
           >
-            <FiShare2 size={22} className="sm:size-24" />
+            <FiShare2 size={24} />
           </button>
         </header>
 
         {data.imageUrl && (
-          <div className="w-full max-w-2xl sm:max-w-4xl md:max-w-7xl mx-auto px-2 sm:px-4 mt-16">
-            <div className="aspect-[16/9] rounded-xl sm:rounded-2xl overflow-hidden border border-emerald-500/30 shadow-lg shadow-emerald-500/20">
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 mt-16">
+            <div className="aspect-[16/9] rounded-2xl overflow-hidden border border-emerald-500/30 shadow-lg shadow-emerald-500/20">
               <img
                 src={data.imageUrl}
                 alt={`${data.title} visual`}
                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                 loading="lazy"
                 decoding="async"
-                style={{ maxHeight: '350px', minHeight: '180px' }}
               />
             </div>
           </div>
         )}
 
-        <div className="max-w-2xl sm:max-w-4xl md:max-w-6xl mx-auto px-2 sm:px-4 mt-8 sm:mt-10">
-          <div className="text-center mb-6 sm:mb-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 lg:px-12 mt-10">
+          <div className="text-center mb-8">
             <h1
-              className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white mb-3 sm:mb-4 leading-tight"
+              className="text-4xl sm:text-5xl font-extrabold text-white mb-4 leading-tight"
               role="heading"
               aria-level="1"
             >
               {data.title}
             </h1>
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-emerald-200 text-xs sm:text-sm">
+            <div className="flex flex-wrap items-center justify-center gap-3 text-emerald-200 text-sm">
               <span>
                 By{" "}
                 <span className="font-semibold">
@@ -200,23 +199,22 @@ const BlogDetails = () => {
                 })}
               </time>
             </div>
-            <p className="text-base sm:text-lg text-gray-400 mt-3 sm:mt-4 max-w-xs sm:max-w-3xl mx-auto">
+          {console.log("Blog content:", data)}
+            <p className="text-lg text-gray-400 mt-4 max-w-3xl mx-auto">
               {data.description}
             </p>
           </div>
           {data.content ? (
             <article
-              className="text-base sm:text-lg prose prose-invert prose-xl sm:prose-2xl max-w-none text-white bg-black/60 backdrop-blur-lg p-4 sm:p-8 rounded-xl sm:rounded-2xl border border-emerald-500/20 shadow-lg shadow-emerald-500/20"
+              className="text-lg prose prose-invert prose-xl sm:prose-2xl max-w-none text-white bg-black/50 backdrop-blur-lg p-8 sm:p-10 rounded-2xl border border-emerald-500/20 shadow-lg shadow-emerald-500/20"
               style={{
                 textShadow: "0 1px 2px rgba(0, 0, 0, 0.5)",
                 lineHeight: "1.75",
-                wordBreak: "break-word",
-                overflowWrap: "anywhere",
               }}
               dangerouslySetInnerHTML={{ __html: data.content }}
             />
           ) : (
-            <p className="text-center text-emerald-100/80 text-lg sm:text-xl">
+            <p className="text-center text-emerald-100/80 text-xl sm:text-2xl">
               No content available
             </p>
           )}

@@ -11,7 +11,7 @@ const BlogCard = ({ blog, onReadMore }) => {
     <div className="relative bg-black/60 backdrop-blur-lg border border-emerald-500/20 rounded-2xl shadow-lg overflow-hidden transition-all duration-200 group hover:scale-101 hover:shadow-emerald-500/20">
       {userData?._id === author?._id && (
         <button
-          className="absolute top-4 right-4 z-20 bg-black/70 hover:bg-emerald-700 text-emerald-400 p-2 rounded-full shadow-lg transition"
+          className="cursor-pointer absolute top-4 right-4 z-20 bg-black/70 hover:bg-emerald-700 text-emerald-400 p-2 rounded-full shadow-lg transition"
           title="Edit Blog"
           aria-label="Edit Blog"
           onClick={() => navigate("/create-blog", { state: { blog } })}

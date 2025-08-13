@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Context } from "../lib/contextapi";
@@ -35,7 +34,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState(
     blog?.imageUrl || ""
   );
-
+  console.log("CreateBlog data:", data);
   const handleCreatePost = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -48,6 +47,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
         visibility: data.visibility,
         imageUrl: uploadedImageUrl || data.imageUrl,
       };
+
       let response;
       if (data._id) {
         // Edit mode
@@ -57,6 +57,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
           {
             headers: {
               Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
             },
           }
         );
@@ -114,6 +115,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
         onSubmit={handleCreatePost}
         className="flex flex-col min-h-[85vh] gap-6"
       >
+        {/* {console.log("CreateBlog form data:", data)} */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 flex-1">
           <div className="flex flex-col space-y-6 bg-black/30 p-6 md:p-8 rounded-3xl border border-emerald-500/20 backdrop-blur-md shadow-xl shadow-emerald-900/20 transition-all duration-300 hover:shadow-emerald-900/40">
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-between items-start mb-6">
@@ -143,7 +145,9 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
                   />
                   <button
                     type="button"
-                    onClick={() => setData({ ...data, visibility: "public" })}
+                    onClick={() =>
+                      setData((prev) => ({ ...prev, visibility: "public" }))
+                    }
                     className={`relative z-10 flex-1 px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-full transition-all duration-300 ${
                       data.visibility === "public"
                         ? "bg-emerald-600/80 text-white shadow-md shadow-emerald-600/50"
@@ -154,7 +158,9 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setData({ ...data, visibility: "private" })}
+                    onClick={() =>
+                      setData((prev) => ({ ...prev, visibility: "private" }))
+                    }
                     className={`relative z-10 flex-1 px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-full transition-all duration-300 ${
                       data.visibility === "private"
                         ? "bg-red-600/80 text-white shadow-md shadow-red-600/50"
@@ -179,7 +185,9 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
                   type="text"
                   id="title"
                   value={data.title}
-                  onChange={(e) => setData({ ...data, title: e.target.value })}
+                  onChange={(e) =>
+                    setData((prev) => ({ ...prev, title: e.target.value }))
+                  }
                   className="w-full p-2 sm:p-3 bg-black/50 border border-emerald-500/30 rounded-xl text-white placeholder-gray-500 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200 text-xs sm:text-base"
                   placeholder="Craft an engaging title..."
                   required
@@ -196,7 +204,9 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
                   type="date"
                   id="date"
                   value={data.date}
-                  onChange={(e) => setData({ ...data, date: e.target.value })}
+                  onChange={(e) =>
+                    setData((prev) => ({ ...prev, date: e.target.value }))
+                  }
                   className="w-full p-2 sm:p-3 bg-black/50 border border-emerald-500/30 rounded-xl text-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200 text-xs sm:text-base"
                   required
                 />
@@ -210,17 +220,20 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
               >
                 Description *
               </label>
+              
               <textarea
-                id="description"
-                value={data.description}
-                onChange={(e) =>
-                  setData({ ...data, description: e.target.value })
-                }
-                className="w-full p-2 sm:p-3 bg-black/50 border border-emerald-500/30 rounded-xl text-white placeholder-gray-500 resize-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200 text-xs sm:text-base"
-                placeholder="Tease your readers with a compelling summary..."
-                rows="4"
-                required
+              id="description"
+              placeholder="Tease your readers with a compelling summary..."
+              value={data.description}
+              onChange={(e) =>
+                setData((prev) => ({ ...prev, description: e.target.value }))
+              }
+              className="w-full p-2 sm:p-3 bg-black/50 border border-emerald-500/30 rounded-xl text-white placeholder-gray-500 resize-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/50 transition-all duration-200 text-xs sm:text-base"
+              rows="4"
               />
+              {/* <p className="text-white">{data.description}</p> */}
+
+              {/* upar bas debug karne */}
             </div>
 
             <div className="space-y-4 sm:space-y-6">
@@ -254,7 +267,7 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
                   id="imageUrl"
                   value={data.imageUrl}
                   onChange={(e) =>
-                    setData({ ...data, imageUrl: e.target.value })
+                    setData((prev) => ({ ...prev, imageUrl: e.target.value }))
                   }
                   className={`w-full p-2 sm:p-3 bg-black/50 border rounded-xl text-white placeholder-gray-500 transition-all duration-200 text-xs sm:text-base ${
                     uploadedImageUrl
@@ -303,7 +316,9 @@ const CreateBlog = ({ onClose, refetchPosts, blog }) => {
             <div className="flex-1 min-h-0 rounded-2xl overflow-hidden border border-emerald-500/20 shadow-inner">
               <RichEditor
                 value={data.content}
-                onChange={(content) => setData({ ...data, content })}
+                onChange={(content) =>
+                  setData((prev) => ({ ...prev, content }))
+                }
                 className="h-full"
               />
             </div>

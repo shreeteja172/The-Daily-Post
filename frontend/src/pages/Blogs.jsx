@@ -310,7 +310,7 @@ const Blogs = () => {
                 <div className="p-6 lg:p-8 h-full flex flex-col">
                   <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl lg:text-2xl font-bold text-white">
-                      Featured Post
+                      Your Latest Blog
                     </h2>
                   </div>
 
