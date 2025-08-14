@@ -10,6 +10,7 @@ import { useContext } from "react";
 const Signin = () => {
   const navigate = useNavigate();
   const { setToken } = useContext(Context);
+  const { setAuthCounter } = useContext(Context);
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -26,6 +27,7 @@ const Signin = () => {
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
       setToken(data.token);
+      setAuthCounter((prev) => prev + 1);
       toast.success("Welcome Again!");
       setData({
         username: "",
@@ -141,7 +143,7 @@ const Signin = () => {
             <p className="text-emerald-100/60">
               Don't have an account?{" "}
               <button
-                onClick={() => navigate("/signup")}
+                onClick={() => navigate("/auth?mode=signup")}
                 className="text-emerald-400 hover:text-emerald-300 font-medium transition-colors duration-300"
               >
                 Sign Up

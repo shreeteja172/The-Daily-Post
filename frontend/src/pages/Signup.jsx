@@ -4,8 +4,11 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import { Context } from "../lib/contextapi";
+import { useContext } from "react";
 const Signup = () => {
   const navigate = useNavigate();
+  const { setAuthCounter } = useContext(Context);
   // useEffect(() => {
   //   if (localStorage.getItem("token")) {
   //     navigate("/");
@@ -29,7 +32,8 @@ const Signup = () => {
     },
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
-      toast.success("Signup successful! Redirecting.......");
+      setAuthCounter((prev) => prev + 1);
+      toast.success("Signup successful! Redirecting to dashboard...");
       setData({
         firstName: "",
         lastName: "",
@@ -203,7 +207,7 @@ const Signup = () => {
             <p className="text-emerald-100/60">
               Already have an account?{" "}
               <button
-                onClick={() => navigate("/signin")}
+                onClick={() => navigate("/auth?mode=signin")}
                 className="text-emerald-400 hover:text-emerald-300 font-medium transition-colors duration-300"
               >
                 Sign In

@@ -205,7 +205,7 @@ const Navigation = () => {
           ) : (
             <>
               <button
-                onClick={() => navigate("/signin")}
+                onClick={() => navigate("/auth?mode=signin")}
                 className="login-btn text-white/80 hover:text-white transition-all duration-300 md:p-3 p-2 rounded-full hover:bg-emerald-500/20 hover:shadow-sm hover:shadow-emerald-500/30"
                 title="Login"
               >
@@ -225,7 +225,7 @@ const Navigation = () => {
               </button>
 
               <button
-                onClick={() => navigate("/signup")}
+                onClick={() => navigate("/auth?mode=signup")}
                 className="signup-btn bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-700 text-white md:p-3 p-2 rounded-full transition-all duration-300 shadow-lg shadow-emerald-500/50 hover:shadow-emerald-500/70 hover:scale-105"
                 title="Get Started"
               >

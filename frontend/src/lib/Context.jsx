@@ -143,6 +143,8 @@ const ContextProvider = ({ children }) => {
         isLoading,
         error,
         handleLogout,
+        authCounter,
+        setAuthCounter,
       }}
     >
       {children}

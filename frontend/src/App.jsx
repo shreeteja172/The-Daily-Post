@@ -2,8 +2,6 @@ import React from "react";
 import LandingPage from "./pages/LandingPage";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import Signup from "./pages/Signup";
-import Signin from "./pages/Signin";
 import Blogs from "./pages/Blogs";
 import InfiniteBlogsAll from "./pages/InfiniteBlogsAll";
 import InfiniteOwnBlogs from "./pages/InfiniteOwnBlogs";
@@ -13,6 +11,8 @@ import BlogDetails from "./pages/BlogDetails";
 import Settings from "./pages/Settings";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import AuthPage from "./pages/AuthPage";
+import Landing from "./pages/Landing";
 function App() {
   return (
     <div>
@@ -29,9 +29,11 @@ function App() {
           <Route path="/edit-blog/:id" element={<CreateBlogPage />} />
         </Route>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/register" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
+        <Route path="/landing" element={<Landing />} />
+        {/* <Route path="/signup" element={<Signup />} /> */}
+        {/* <Route path="/register" element={<Signup />} /> */}
+        {/* <Route path="/signin" element={<Signin />} /> */}
+        <Route path="/auth" element={<AuthPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
