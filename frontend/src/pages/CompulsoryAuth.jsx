@@ -37,7 +37,6 @@ const CompulsoryAuth = () => {
 
   return (
     <section className="flex min-h-screen items-center justify-center bg-gradient-to-br from-black via-neutral-950 to-emerald-900 px-4 sm:px-6 relative overflow-hidden">
-      {/* Enhanced animated background */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <motion.div
           className="absolute top-0 left-0 w-48 sm:w-72 h-48 sm:h-72 bg-emerald-500/10 rounded-full blur-3xl"
@@ -65,7 +64,6 @@ const CompulsoryAuth = () => {
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
         />
         
-        {/* Floating particles */}
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
@@ -95,7 +93,6 @@ const CompulsoryAuth = () => {
         onHoverStart={() => setIsHovered(true)}
         onHoverEnd={() => setIsHovered(false)}
       >
-        {/* Enhanced Icon */}
         <motion.div
           className="flex justify-center mb-6 sm:mb-8"
           animate={{ rotate: isHovered ? 360 : 0 }}
@@ -117,7 +114,6 @@ const CompulsoryAuth = () => {
           </div>
         </motion.div>
 
-        {/* Enhanced Heading */}
         <motion.h1
           className="text-3xl sm:text-4xl font-extrabold text-white mb-3 sm:mb-4 tracking-tight drop-shadow-lg"
           initial={{ opacity: 0, y: 20 }}
@@ -127,7 +123,6 @@ const CompulsoryAuth = () => {
           Access Restricted
         </motion.h1>
 
-        {/* Enhanced Description */}
         <motion.p
           className="text-base sm:text-lg text-emerald-100/80 mb-6 sm:mb-8 leading-relaxed"
           initial={{ opacity: 0, y: 20 }}
@@ -141,7 +136,6 @@ const CompulsoryAuth = () => {
           community!
         </motion.p>
 
-        {/* Enhanced Benefits */}
         <motion.div
           className="mb-6 sm:mb-8"
           initial={{ opacity: 0, y: 20 }}
@@ -169,8 +163,7 @@ const CompulsoryAuth = () => {
               </motion.div>
             </AnimatePresence>
           </div>
-          
-          {/* Static benefits list */}
+
           <ul className="flex flex-col gap-2 sm:gap-3 text-left text-emerald-100/70 text-xs sm:text-sm mx-auto max-w-xs">
             {benefits.map((benefit, index) => (
               <motion.li
@@ -187,7 +180,6 @@ const CompulsoryAuth = () => {
           </ul>
         </motion.div>
 
-        {/* Enhanced Buttons */}
         <motion.div
           className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center"
           initial={{ opacity: 0, y: 20 }}
@@ -231,7 +223,6 @@ const CompulsoryAuth = () => {
           </motion.button>
         </motion.div>
 
-        {/* Additional decorative element */}
         <motion.div
           className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-emerald-500/20"
           initial={{ opacity: 0 }}

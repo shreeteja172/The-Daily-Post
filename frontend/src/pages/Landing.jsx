@@ -613,7 +613,6 @@ const LandingPage = () => {
                         </div>
                       </div>
 
-                      {/* Image showcase */}
                       <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <motion.div
                           whileHover={{ rotate: -1.5, y: -4 }}
@@ -658,7 +657,6 @@ const LandingPage = () => {
                         </div>
                       </div>
 
-                      {/* Floating filmstrip for decoration */}
                       <div className="mt-6 relative">
                         <div className="pointer-events-none absolute -inset-x-4 -top-4 -bottom-4 bg-gradient-to-b from-emerald-400/0 via-emerald-400/5 to-transparent rounded-3xl" />
                         <div className="flex items-center gap-3 overflow-hidden">
