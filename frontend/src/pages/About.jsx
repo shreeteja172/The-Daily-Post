@@ -24,7 +24,6 @@ const About = () => {
           </div>
 
           <div className="bg-black/50 backdrop-blur-xl rounded-2xl border border-emerald-500/30 shadow-2xl shadow-emerald-500/20 overflow-hidden">
-
             <div className="p-8">
               <div className="flex flex-col md:flex-row items-center mb-8">
                 <div className="md:w-1/3 mb-6 md:mb-0">

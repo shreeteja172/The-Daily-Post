@@ -6,7 +6,6 @@ import { Context } from "../lib/contextapi";
 import CreateBlog from "../components/CreateBlog";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-
 const Blogs = () => {
   const {  token } = useContext(Context);
   const [showCreateBlog, setShowCreateBlog] = useState(false);
@@ -376,7 +375,7 @@ const Blogs = () => {
                         </div>
 
                         <button
-                          className="w-full bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 text-emerald-300 border border-emerald-500/30 hover:border-emerald-400/50 px-4 py-2.5 rounded-xl transition-all duration-300 font-medium"
+                          className="cursor-pointer w-full bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 text-emerald-300 border border-emerald-500/30 hover:border-emerald-400/50 px-4 py-2.5 rounded-xl transition-all duration-300 font-medium"
                           onClick={() => navigate(`/blogs/${userPosts[0]._id}`)}
                         >
                           Read Full Post

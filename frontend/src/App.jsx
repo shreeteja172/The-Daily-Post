@@ -1,7 +1,8 @@
 import React from "react";
-import LandingPage from "./pages/LandingPage";
+import Landing from "./pages/Landing";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import LandingPage from "./pages/Landing";
 import Blogs from "./pages/Blogs";
 import InfiniteBlogsAll from "./pages/InfiniteBlogsAll";
 import InfiniteOwnBlogs from "./pages/InfiniteOwnBlogs";
@@ -12,7 +13,7 @@ import Settings from "./pages/Settings";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import AuthPage from "./pages/AuthPage";
-import Landing from "./pages/Landing";
+import CompulsoryAuth from "./pages/CompulsoryAuth";
 function App() {
   return (
     <div>
@@ -28,11 +29,9 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/edit-blog/:id" element={<CreateBlogPage />} />
         </Route>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/landing" element={<Landing />} />
-        {/* <Route path="/signup" element={<Signup />} /> */}
-        {/* <Route path="/register" element={<Signup />} /> */}
-        {/* <Route path="/signin" element={<Signin />} /> */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/landing" element={<LandingPage />} />
+        <Route path="/requireauth" element={<CompulsoryAuth />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
