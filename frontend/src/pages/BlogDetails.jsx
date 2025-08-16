@@ -145,7 +145,7 @@ const BlogDetails = () => {
       <div className="relative z-10 pb-16">
         <header className="fixed top-4 left-4 right-4 z-50 flex justify-between items-center max-w-7xl mx-auto px-4">
           <button
-            onClick={() => navigate("/blogs")}
+            onClick={() => navigate("/all-blogs")}
             className="p-2 bg-black/50 rounded-full border border-emerald-500/30 text-emerald-100 hover:bg-emerald-500/20 transition-all duration-300"
             aria-label="Back to blogs"
           >

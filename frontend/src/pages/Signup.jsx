@@ -6,16 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { Context } from "../lib/contextapi";
 import { useContext } from "react";
-
 const Signup = () => {
   const navigate = useNavigate();
-  const { setAuthCounter } = useContext(Context);
-  // useEffect(() => {
-  //   if (localStorage.getItem("token")) {
-  //     navigate("/");
-  //   }
-  // }
-  // , [navigate]);
+  const { setToken, setAuthCounter } = useContext(Context);
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -33,6 +26,7 @@ const Signup = () => {
     },
     onSuccess: (data) => {
       localStorage.setItem("token", data.token);
+      setToken(data.token);
       setAuthCounter((prev) => prev + 1);
       toast.success("Signup successful! Redirecting to dashboard...");
       setData({
@@ -56,6 +50,7 @@ const Signup = () => {
 
   const handleSignup = (e) => {
     e.preventDefault();
+
     if (
       !data.firstName ||
       !data.lastName ||
@@ -78,14 +73,12 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden flex items-center justify-center py-4 sm:py-8 px-4">
-      
       <div className="absolute inset-0 overflow-hidden">
-        
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-black to-teal-600/10"></div>
         <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,.01)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
       </div>
-      
-      <header className="fixed md:left-6 md:top-1/2 md:transform md:-translate-y-1/2 bottom-4 left-1/2 transform -translate-x-1/2 md:translate-x-0 z-50 md:bottom-auto">
+
+      <header className="fixed top-0 left-1/2 transform -translate-x-1/2 md:left-6 md:top-1/2 md:transform md:-translate-y-1/2 md:translate-x-0 z-50 pt-4 md:pt-0">
         <div className="bg-black/50 backdrop-blur-xl rounded-full md:px-4 md:py-6 px-3 py-2 shadow-2xl border border-emerald-500/30 shadow-emerald-500/20">
           <nav className="flex md:flex-col flex-row items-center md:space-y-6 md:space-x-0 space-x-2 sm:space-x-3 space-y-0">
             <div className="relative md:mb-2 mb-0">
@@ -117,8 +110,8 @@ const Signup = () => {
                 />
               </svg>
             </button>
-            <button 
-            onClick={() => {
+            <button
+              onClick={() => {
                 navigate("/");
                 scrollToSection("features");
               }}
@@ -140,7 +133,7 @@ const Signup = () => {
               </svg>
             </button>
             <button
-            onClick={() => {
+              onClick={() => {
                 navigate("/");
                 scrollToSection("blogs");
               }}
@@ -205,12 +198,14 @@ const Signup = () => {
       </header>
       <div className="absolute inset-0 bg-black/20"></div>
 
-      <div className="relative z-10 w-full max-w-md mx-auto px-4 sm:px-6">
+      <div className="relative z-10 w-full max-w-md mx-auto px-4 sm:px-6 mt-20 md:mt-0">
         <div className="bg-black/40 backdrop-blur-xl rounded-2xl border border-emerald-500/20 p-6 sm:p-8 shadow-2xl shadow-emerald-500/10">
           {/* Logo/Header */}
           <div className="text-center mb-6 sm:mb-8">
             <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-emerald-400 via-emerald-500 to-teal-600 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/50 mx-auto mb-4">
-              <span className="text-white font-bold text-lg sm:text-xl">TDP</span>
+              <span className="text-white font-bold text-lg sm:text-xl">
+                TDP
+              </span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
               Join Us Today

@@ -7,10 +7,10 @@ import CreateBlog from "../components/CreateBlog";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 const Blogs = () => {
-  const {  token } = useContext(Context);
+  const { token, authCounter } = useContext(Context);
   const [showCreateBlog, setShowCreateBlog] = useState(false);
   const navigate = useNavigate();
-
+  // const { setAuthCounter } = useContext(Context);
   const fetchOthers = async () => {
     const response = await axios.get(
       `${import.meta.env.VITE_BACKEND_URL}/api/blogs/getAllBlogs`,
@@ -40,7 +40,7 @@ const Blogs = () => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["blogs"],
+    queryKey: ["blogs", token, authCounter],
     queryFn: async () => {
       const [othersResponse, ownResponse] = await Promise.all([
         fetchOthers(),
@@ -52,7 +52,7 @@ const Blogs = () => {
         username: ownResponse.username,
       };
     },
-    staleTime: 1000 * 60 * 0.1,
+    staleTime: 1000 * 60 * 1,
     enabled: !!token,
   });
 
@@ -76,6 +76,7 @@ const Blogs = () => {
     },
     onSuccess: () => {
       refetch();
+      toast.success("Blog deleted successfully!");
     },
     onError: () => {
       alert("Failed to delete blog. Please try again.");
@@ -219,7 +220,6 @@ const Blogs = () => {
                         hello 👋
                       </p>
                     </div>
-                    
                   </div>
 
                   <div className="bg-black/35 rounded-2xl border border-emerald-500/15 p-6 shadow-inner">
@@ -278,7 +278,7 @@ const Blogs = () => {
                       </div>
 
                       <button
-                        className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-7 py-3 rounded-2xl font-semibold transition-all duration-200 active:scale-95 shadow-lg shadow-emerald-500/25 border border-emerald-400/20"
+                        className="cursor-pointer bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-7 py-3 rounded-2xl font-semibold transition-all duration-200 active:scale-95 shadow-lg shadow-emerald-500/25 border border-emerald-400/20"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleCreatePost();
@@ -404,7 +404,7 @@ const Blogs = () => {
                       </p>
                       <button
                         onClick={handleCreatePost}
-                        className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-4 py-2 rounded-lg text-sm transition-all duration-300"
+                        className="cursor-pointer bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-4 py-2 rounded-lg text-sm transition-all duration-300"
                       >
                         Get Started
                       </button>
@@ -550,13 +550,11 @@ const Blogs = () => {
                         </div>
                       </div>
 
-                      <div className="p-4 lg:p-5"
-                      >
-                        <h3
-                        className="text-white font-semibold text-base lg:text-lg mb-2 line-clamp-2 group-hover:text-emerald-300 transition-colors duration-300">
+                      <div className="p-4 lg:p-5">
+                        <h3 className="text-white font-semibold text-base lg:text-lg mb-2 line-clamp-2 group-hover:text-emerald-300 transition-colors duration-300">
                           {post.title || "Untitled Post"}
                         </h3>
-                       
+
                         <div
                           className="text-emerald-100/70 text-sm leading-relaxed line-clamp-3 mb-3"
                           dangerouslySetInnerHTML={{
@@ -615,7 +613,7 @@ const Blogs = () => {
                     </p>
                     <button
                       onClick={handleCreatePost}
-                      className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg shadow-emerald-500/30"
+                      className="cursor-pointer bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg shadow-emerald-500/30"
                     >
                       Create Your First Post
                     </button>
@@ -772,30 +770,6 @@ const Blogs = () => {
                     </p>
                   </div>
                 )}
-              </div>
-            )}
-
-            {posts.length > 12 && (
-              <div className="text-center mt-8">
-                <button
-                  onClick={() => navigate("/all-blogs")}
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 text-emerald-300 border border-emerald-500/30 hover:border-emerald-400/50 px-6 py-3 rounded-xl transition-all duration-300 font-medium"
-                >
-                  <span>Explore All Stories</span>
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </svg>
-                </button>
               </div>
             )}
           </div>

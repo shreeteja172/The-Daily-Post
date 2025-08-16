@@ -67,7 +67,7 @@ const Signin = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-black to-teal-600/10"></div>
         <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(20,184,166,.01)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
       </div>
-      <header className="fixed md:left-6 md:top-1/2 md:transform md:-translate-y-1/2 bottom-4 left-1/2 transform -translate-x-1/2 md:translate-x-0 z-50 md:bottom-auto">
+      <header className="fixed top-0 left-1/2 transform -translate-x-1/2 md:left-6 md:top-1/2 md:transform md:-translate-y-1/2 md:translate-x-0 z-50 pt-4 md:pt-0">
         <div className="bg-black/50 backdrop-blur-xl rounded-full md:px-4 md:py-6 px-3 py-2 shadow-2xl border border-emerald-500/30 shadow-emerald-500/20">
           <nav className="flex md:flex-col flex-row items-center md:space-y-6 md:space-x-0 space-x-2 sm:space-x-3 space-y-0">
             <div className="relative md:mb-2 mb-0">

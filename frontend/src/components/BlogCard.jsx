@@ -10,27 +10,50 @@ const BlogCard = ({ blog, onReadMore }) => {
   return (
     <div className="relative bg-black/60 backdrop-blur-lg border border-emerald-500/20 rounded-2xl shadow-lg overflow-hidden transition-all duration-200 group hover:scale-101 hover:shadow-emerald-500/20">
       {userData?._id === author?._id && (
-        <button
-          className="cursor-pointer absolute top-4 right-4 z-20 bg-black/70 hover:bg-emerald-700 text-emerald-400 p-2 rounded-full shadow-lg transition"
-          title="Edit Blog"
-          aria-label="Edit Blog"
-          onClick={() => navigate("/create-blog", { state: { blog } })}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-6 h-6"
+        <div className="absolute top-4 right-4 z-20 flex gap-2">
+          <button
+            className="cursor-pointer bg-black/70 hover:bg-emerald-700 text-emerald-400 p-2 rounded-full shadow-lg transition"
+            title="Edit Blog"
+            aria-label="Edit Blog"
+            onClick={() => navigate("/create-blog", { state: { blog } })}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.5 19.213l-4 1 1-4L16.862 3.487z"
-            />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16.862 3.487a2.25 2.25 0 113.182 3.182L7.5 19.213l-4 1 1-4L16.862 3.487z"
+              />
+            </svg>
+          </button>
+          <button
+            className="cursor-pointer bg-black/70 hover:bg-red-700 text-red-400 p-2 rounded-full shadow-lg transition"
+            title="Delete Blog"
+            aria-label="Delete Blog"
+            onClick={() => blog.onDelete && blog.onDelete(blog)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </button>
+        </div>
       )}
       {imageUrl && (
         <div className="relative w-full aspect-[16/9] overflow-hidden">

@@ -2,18 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { Context } from "../lib/contextapi";
+import { useQueryClient } from "@tanstack/react-query";
+
 const Navigation = () => {
-  const { userData } = useContext(Context);
+  const queryClient = useQueryClient();
+  const { userData, token, authCounter } = useContext(Context);
   const navigate = useNavigate();
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return !!localStorage.getItem("token");
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(!!token);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
-  }, []); 
+  }, [token, authCounter]);
 
   const handleScrollToSection = (sectionId) => {
     if (location.pathname === "/") {
@@ -28,6 +28,7 @@ const Navigation = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     navigate("/");
+    queryClient.clear();
   };
 
   const authenticatedNavItems = [

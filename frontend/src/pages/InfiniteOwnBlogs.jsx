@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation";
 import BlogCard from "../components/BlogCard";
 import { useMemo, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 const fetchAllBlogs = async ({ pageParam }) => {
   const response = await axios.get(
     `${import.meta.env.VITE_BACKEND_URL}/api/blogs/myBlogs?_limit=8&_page=${
@@ -18,11 +19,11 @@ const fetchAllBlogs = async ({ pageParam }) => {
     }
   );
   // console.log("Fetched my blogs:", response.data);
-  toast.success("My blogs loaded successfully");
   return response.data;
 };
 
 const InfiniteOwnBlogs = () => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [visibleCount, setVisibleCount] = useState(6);
 
@@ -50,6 +51,25 @@ const InfiniteOwnBlogs = () => {
 
   const handleReadMore = (blog) => {
     navigate(`/blogs/${blog._id}`);
+  };
+
+  const handleDeleteBlog = async (blog) => {
+    if (!window.confirm("Are you sure you want to delete this blog?")) return;
+    try {
+      await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/blogs/${blog._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      toast.success("Blog deleted successfully!");
+      queryClient.invalidateQueries(["myBlogs"]);
+      queryClient.invalidateQueries(["allBlogs"]);
+    } catch {
+      toast.error("Failed to delete blog.");
+    }
   };
 
   if (isLoading) {
@@ -139,7 +159,7 @@ const InfiniteOwnBlogs = () => {
                 <BlogCard
                   key={blog._id}
                   onClick={() => navigate(`/blogs/${blog._id}`)}
-                  blog={blog}
+                  blog={{ ...blog, onDelete: handleDeleteBlog }}
                   onReadMore={handleReadMore}
                 />
               ))}
@@ -165,6 +185,7 @@ const InfiniteOwnBlogs = () => {
             )}
 
             {visibleCount >= uniqueBlogs.length && (
+              
               <div className="text-center mt-8">
                 <p className="text-emerald-100/60">
                   You've reached the end of your blog posts!

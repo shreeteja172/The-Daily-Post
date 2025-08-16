@@ -19,10 +19,7 @@ const fetchAllBlogs = async ({ pageParam }) => {
     }
   );
   // console.log("Fetched all blogs:", response.data);
-  if (response.status == 200) {
-    toast.success("All blogs loaded successfully");
-  }
-
+  toast.success("All blogs loaded successfully");
   return response.data;
 };
 
@@ -56,6 +53,7 @@ const InfiniteBlogsAll = () => {
       return nextPage;
     },
     staleTime: 60 * 100,
+
   });
 
   const handleReadMore = (blog) => {

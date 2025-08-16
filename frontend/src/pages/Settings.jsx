@@ -6,20 +6,24 @@ import Navigation from "../components/Navigation";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useQueryClient } from "@tanstack/react-query";
 const Settings = () => {
+  const queryClient = useQueryClient();
   const { userData, setToken } = useContext(Context);
   const navigate = useNavigate();
-  
+
   const [profileData, setProfileData] = useState({
     firstName: userData?.firstName || "",
     lastName: userData?.lastName || "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     setToken(null);
     navigate("/");
+    queryClient.clear();
   };
 
   const updateProfileMutation = useMutation({
@@ -37,6 +41,7 @@ const Settings = () => {
     },
     onSuccess: () => {
       toast.success("Profile updated successfully!");
+      setProfileData((prev) => ({ ...prev, password: "" }));
     },
     onError: (error) => {
       console.error("Error updating profile:", error);
@@ -177,18 +182,58 @@ const Settings = () => {
                   <label className="text-emerald-400 text-sm font-medium mb-2 block">
                     New Password
                   </label>
-                  <input
-                    type="password"
-                    value={profileData.password}
-                    onChange={(e) =>
-                      setProfileData({
-                        ...profileData,
-                        password: e.target.value,
-                      })
-                    }
-                    className="w-full px-3 py-2 bg-black/50 border border-emerald-500/30 rounded-lg text-white placeholder-emerald-100/40 focus:outline-none focus:border-emerald-500/50 focus:bg-black/60 transition-all duration-300"
-                    placeholder="Enter new password (leave blank to keep current)"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={profileData.password}
+                      onChange={(e) =>
+                        setProfileData({
+                          ...profileData,
+                          password: e.target.value,
+                        })
+                      }
+                      className="w-full px-3 py-2 bg-black/50 border border-emerald-500/30 rounded-lg text-white placeholder-emerald-100/40 focus:outline-none focus:border-emerald-500/50 focus:bg-black/60 transition-all duration-300 pr-10"
+                      placeholder="Enter new password (leave blank to keep current)"
+                    />
+                    <button
+                      type="button"
+                      className="cursor-pointer absolute right-2 top-1/2 transform -translate-y-1/2 text-emerald-300 hover:text-emerald-400 focus:outline-none"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      tabIndex={-1}
+                    >
+                      {showPassword ? (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm2.25 2.25l2.122 2.122a9.003 9.003 0 01-13.744 0l2.122-2.122M9.75 9.75l-2.122-2.122a9.003 9.003 0 0113.744 0l-2.122 2.122"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm2.25 2.25l2.122 2.122a9.003 9.003 0 01-13.744 0l2.122-2.122"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                   <p className="text-emerald-300 text-xs mt-1">
                     Leave blank to keep your current password
                   </p>
@@ -250,7 +295,7 @@ const Settings = () => {
                     </span>
                   </div>
                 </button>
-                
+
                 <button
                   onClick={() => navigate("/blogs")}
                   className="flex-1 px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium rounded-lg hover:from-emerald-600 hover:to-teal-700 transition-all duration-300 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98]"
