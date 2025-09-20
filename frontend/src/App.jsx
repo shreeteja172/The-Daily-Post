@@ -2,6 +2,7 @@ import React from "react";
 import Landing from "./pages/Landing";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { Analytics } from "@vercel/analytics/react";
 import LandingPage from "./pages/Landing";
 import Blogs from "./pages/Blogs";
 import InfiniteBlogsAll from "./pages/InfiniteBlogsAll";
@@ -35,6 +36,7 @@ function App() {
         <Route path="/auth" element={<AuthPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Analytics />
     </div>
   );
 }
